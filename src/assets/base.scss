@@ -1,0 +1,29 @@
+// .text-primary {
+//   color: red;
+
+// }
+
+@font-face {
+  font-family: 'PoltawskiNowy';
+  src: url('fonts/PoltawskiNowy-VariableFont_wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+@font-face {
+  font-family: 'FrederickatheGreat';
+  src: url('fonts/FrederickatheGreat-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+* {
+  font-family: 'PoltawskiNowy';
+}
+h1, h2, h3, h4, h5 {
+  font-family: 'FrederickatheGreat';
+
+} 

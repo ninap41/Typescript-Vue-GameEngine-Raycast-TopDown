@@ -1,0 +1,70 @@
+{
+  "entries": [
+    {
+      "id": 555979059,
+      "content": "Yesterday I worked on end to End testing and tried to get the iframe tests working. I got the transported code working with some changes to the iframe logic and opened A PR this morning. Ryan reached out to me in regards to some comments that were added to the ticket by matt, which&nbsp; he explained he's gonna go ahead and add those changes to ,my PR. today I'll be addressing comments, running a manual build of the branch on bamboo, all bamboo builds had passing tests, for some reason the last one hung probably just need to pull in master.&nbsp; I'll Be doing some PR review .wand picking up something from the back log.&nbsp;",
+      "date": "2020-12-16T17:39:12.913Z",
+      "tags": []
+    },
+    {
+      "id": 842717005,
+      "content": "Yesterday, other than sprint planning, I updated the run functions of the commands&nbsp; in the tool to accomdate if the user does not want to use the prompts and prefers just passing flags instead. Added some oclif error catching and updated that PR. After sprint planning I picked up the e2e testing ticket in the service worker, because I recall after having helped out Ryan a couple sprints ago have some background on the issues that were occuring, so gonna take a look at the improved service worker testing PR that's been open, bring in some of those tests, and try to remember the specific scenario that was causing the issues work on that. Gonna try to get the cli tool Pr cleaner and merged after we get another approval.",
+      "date": "2020-12-10T17:34:34.024Z",
+      "tags": []
+    },
+    {
+      "id": 443949514,
+      "content": "Yesterday prepped for demo did the demo. And then took some of the feedback about the tool into consideration. This morning I did add an option for the run command where we can pass a flag called gatewayPath where it takes value that's the&nbsp; absolute path to any gateway file the user has on their machine. So if the flag is present is just runs mitmProxy with a different python script&nbsp; referencing the users path or it executes the prompts that we saw yesterday during demo. From from Ryan told me chris about your conversation that should cover the requisite that we missed in the ticket. Today Ill be catching up on PR review, addressing comments, and then sprint planning",
+      "date": "2020-12-09T17:29:58.051Z",
+      "tags": []
+    },
+    {
+      "id": 230659218,
+      "content": "yesterday, I wrapped up the history feature for the cli tool, updated validation, and ryan and I tested out the scripts more.&nbsp; Needed to make some changes to the python scripts for the injection with mitmdump to work correctly just for the gateway script. This morning Im cleaning up a few things before demo, prepping for demo, and afterwards will need to add comments as a part of the code cleanup before opening a PR to get reviewed",
+      "date": "2020-12-08T17:21:16.137Z",
+      "tags": []
+    },
+    {
+      "id": 244551152,
+      "content": "<span style=\"background-color: rgb(68, 68, 68);\">Friday, continued the tool, added history feature for the bootstrap js urls & a download from history option, and paired a little ryan on the Readme. . Need to update the history feature slightly today to limit it to 5, rework the update settings flow and add an advanced settings option for gateway start and gateway end, since ryan just experienced while working on a that the overwritting of the gateway did not work due to variations in the gateway start and end on a client site. So maybe some extra validation on that before we have demo tomorrow. Going to figure out how to divy up the work today.&nbsp;</span>",
+      "date": "2020-12-07T17:25:47.027Z",
+      "tags": []
+    },
+    {
+      "id": 899097090,
+      "content": "yesterday, paired to get the regex stuff working. Now we are extracting out the gateway and creating or recreating a new js file with file system. So we have the bootstrap and the gateway side by side for support to use. this morning I worked on getting the absolute paths working in the python scripts, so now that im pushed up, I think Ryan is going to be doing error handling and testing, and I am going to be working on code clean up, abstracting out some commands, & getting the relative paths right, so we can run the cli from any directory and it not break the path to the mitm proxy scripts (got to use dirname directory name included in node) hoping thats simple. Just gonna go down the list of improvements we can make.&nbsp;&nbsp;",
+      "date": "2020-12-02T17:20:34.909Z",
+      "tags": []
+    },
+    {
+      "id": 419716254,
+      "content": "yesterday&nbsp;<div><br></div><div>paired with ryan on the cli tool. we figured out how to download the bootstrap from any url, added axios to the project</div><div><br></div><div>Last night I worked on a file system class with node's fs, to make the api call to retieve the bootstrap&nbsp; and convert the data to a new&nbsp; Bootstrap file in testScripts&nbsp; directory and a new gateway file. It also manages a settings file where listenPort, the debug_gateway path, bootrap path, and the download&nbsp; bootstrap url&nbsp; path&nbsp; is stored.&nbsp;</div><div>Removed static variables in the commands,&nbsp;</div><div>so now we have one json file, acting as a config that is updated and overwritten, when someone boots up the cli their settings from a previous session are saved</div><div>I added a restore command so they can load up the defaultSettings, of the project</div><div>&nbsp;The python scripts are updated,&nbsp; &nbsp;to work now with the settings managed by file system. dynamically contains the debug gateway.</div><div>I added&nbsp; asynchronous spinners & messages&nbsp; for a lot of the downloading & extracting commands, just because it looks nice from a Ui and Ux perspective.&nbsp;</div><div><br></div><div><br></div><div><br></div><div>and this morning took a look at the Regex&nbsp; Ryan was working on&nbsp; for extracting the gateway from the&nbsp; bootstrap. That's one of our last hurdles, the functionality is there to overwrite the testscripts gateway&nbsp; file with the extracted js. and we're pretty close.&nbsp; one last thing to do in regards to this is tweaking from of the&nbsp; &nbsp;paths between the node side of things to the mitmProxy scripts & I guess a help command.&nbsp; Made a lot of progress. it's almost done.</div><div><br></div>",
+      "date": "2020-12-01T21:18:44.648Z",
+      "tags": []
+    },
+    {
+      "id": 500482930,
+      "content": "<div style=\"color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Menlo, Monaco, \"Courier New\", monospace; font-size: 12px; line-height: 18px; white-space: pre;\"><div>    <span style=\"color: #6a9955;\">/** Friday (paired with ryan)</span></div><div><span style=\"color: #6a9955;\">   </span></div><div><span style=\"color: #6a9955;\">     * 1. figured out how to set debug gateway variable in the python script to an absolute path to the privacy scripts testScripts directory to run the gateway file</span></div><div><span style=\"color: #6a9955;\">which privacy-gateway-test.js at the moment</span></div><div><span style=\"color: #6a9955;\">     * 2. and we used spawn instead of execute from the </span><span style=\"color: rgb(206, 145, 120);\">child_process package </span><span style=\"color: rgb(106, 153, 85);\">to get mitmproxy to run</span><span style=\"color: rgb(106, 153, 85);\"> mitmProxy</span><span style=\"color: rgb(106, 153, 85);\"> with all the appropriate flags, </span></div><div><span style=\"color: #6a9955;\">     * 3. added a utilities file for chalk and spawning commands</span></div><div><span style=\"color: #6a9955;\">     * this morning began creating the command for downloadGatway, and figuring out how were going to get the gateway script from a clients website </span></div><div><span style=\"color: #6a9955;\">(scaping or s3?). if anyone has a suggestion for the best way to do this please do tell </span></div><div><span style=\"color: #6a9955;\">     * So what's left to do: </span></div><div><span style=\"color: #6a9955;\">     * 1. finish up the download command for getting the script file repo  https://nexus.ensighten.com/ensighten/Bootstrap.js</span></div><div><span style=\"color: #6a9955;\">     * https://nexus.toyota.com/toyotanational/Bootstrap.js</span></div><div><span style=\"color: #6a9955;\">     * </span></div><div><span style=\"color: #6a9955;\">     * 2. extra, having settings for debug paths and port ids, and possibly creating a customized help command telling the user how to use the tool</span></div><div><span style=\"color: #6a9955;\"> (mirror the readme, suggest deleting old gateway.)</span></div><div><span style=\"color: #6a9955;\">     * </span></div><div><span style=\"color: #6a9955;\">     */</span></div><div><span style=\"color: #6a9955;\">doing this today before sprint planning. </span></div></div>",
+      "date": "2020-11-30T20:22:09.283Z",
+      "tags": []
+    },
+    {
+      "id": 455016695,
+      "content": "this morning worked through my open PRs comments and&nbsp; yesterday I prepped for demo with Ryan, this morning we installed child process package and currently in the process of getting mitmproxy to run on the cli tool before adding the first command for pulling in the client bootstrap. Moving along, running mitmproxy with node from the cli is causing some errors but were working through them. Looking to get my Prs merged today before the weekend and at least get mitmProxy to run with the cli.&nbsp;",
+      "date": "2020-11-25T17:24:59.241Z",
+      "tags": []
+    },
+    {
+      "id": 874446287,
+      "content": "Was out for three days last week, tuesday I opened a PR for the urlProcessor&nbsp; /service worker ticket, this morning, addressing comments,I have one or two left, will push up shortly to get that re reviewed and merged, and a little bit this morning pairing with ryan to see where he's at with command line tool, , It looks like a good start, today we're bringing it into privacy scripts so we can both work on it and setting up flags for it, basic commands, potentially prompts",
+      "date": "2020-11-24T17:04:18.320Z",
+      "tags": []
+    },
+    {
+      "id": 124925983,
+      "content": "Friday, Worked through the failing Qubole jobs in Prod, which turned out to be a weird deadlocking scenario when the feedback loop would read from domains found table at the same time the Qubole hive query was trying to write to it so My changes were tested in stage and then deployed to stage and prod and there is a PR open&nbsp; updated the mySQL connection session with another Query in the feedback loop. Today I am continuing the urlProcessor integration to the service worker.&nbsp;&nbsp;",
+      "date": "2020-11-16T17:32:20.631Z",
+      "tags": []
+    }
+  ]
+}
