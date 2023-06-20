@@ -67,6 +67,36 @@ export const clearCanvas = () => {
 export const pixelsToMapSize = (value: number, size: number) => {
 	return Math.ceil(value / size)
 }
+export function reinitializeChangeScene(scene: any) {
+	window.document.getElementById("defaultCanvas0")?.remove()
+}
+
+export const getLighting = (p5: any, type?: string) => {
+	p5.push()
+	p5.blendMode(p5.MULTIPLY)
+
+	p5.rect(0, 0, p5.width, p5.height)
+	p5.fill(p5.color(95, [p5.alpha(100)]))
+
+	p5.pop()
+}
+let fade = 0
+var fadeAmount = 1
+export const fadeIn = (p5: any, animation: any) => {
+	p5.clear()
+	p5.fill(0, 0, 0, fade)
+	p5.rect(0, 0, p5.width, p5.height)
+	if (fade > 0) {
+		fadeAmount = 255
+	}
+
+	if (fade > 255) {
+		fadeAmount = +10
+		animation()
+	}
+
+	fade += fadeAmount * 0.04
+}
 export const arrayOf9ths = [9, 18, 27, 36, 45, 54, 63]
 /**
  * Returns a boolean to tell if tile character is FACING is passible

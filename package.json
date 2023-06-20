@@ -2,7 +2,7 @@
 	"name": "vue-project",
 	"version": "0.0.0",
 	"scripts": {
-		"dev": "vite --host",
+		"serve": "vite --host",
 		"build": "vue-tsc --noEmit && vite build",
 		"preview": "vite preview --host --port 3000",
 		"test:unit": "vitest --environment jsdom",

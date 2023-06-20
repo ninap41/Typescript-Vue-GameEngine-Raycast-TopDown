@@ -7,18 +7,37 @@ import {
 	pixelsToMapSize,
 	arrayOf9ths,
 } from "./utility"
-export var map1 = {
-	name: "Bedroom",
+
+export var map2 = {
+	name: "Bathroom",
 	tiles: [
 		//12x8
-		[2, 1, 1, 1, 1, 1, 2],
-		[3, 0, 0, 0, 0, 0, 1],
-		[1, 0, 0, 0, 0, 0, 1],
-		[1, 0, 0, 0, 0, 0, 1],
-		[2, 1, 1, 1, 1, 1, 2],
+		[2, 1, 1, 1, 2],
+
+		[1, 0, 0, 0, 3],
+
+		[2, 1, 1, 1, 2],
 	],
 	interactable: [{ coordinates: [1, 3] }],
 	decoration: [{ coordinates: [1, 2] }],
+	changeSceneCondition: (map: any, player: any, p5: any) => {
+		if (
+			pixelsToMapSize(player.x, map.size) === 0 &&
+			pixelsToMapSize(player.y, map.size) === 1 &&
+			player.rot === 90 &&
+			p5.kb.presses("space")
+		) {
+			return "Bathroom"
+		}
+		if (
+			pixelsToMapSize(player.x, map.size) === 3 &&
+			pixelsToMapSize(player.y, map.size) === 1 &&
+			player.rot === 270 &&
+			p5.kb.presses("space")
+		) {
+			return "Hallway"
+		}
+	},
 	size: 100,
 	scale: 1,
 	imgs: {
@@ -27,9 +46,81 @@ export var map1 = {
 		2: "src/assets/wall_300_corner.png",
 		3: "src/assets/wall_300_door.png",
 	},
+	animations: {
+		0: {
+			name: "brownDoor",
+			frames: 11,
+			img: "src/assets/door_450_520_brown.png",
+			frameDelay: 10,
+			frameSize: [450, 520],
+			scale: 5,
+			looping: false,
+			roomChange: "Bathroom",
+			onComplete: (gameInstance: any) => {
+				// console.log(gameInstance, "done, game?")
+			},
+		},
+	},
 	playerStart: (coordinates: any) => coordinates || [1, 1],
+	loadedImages: {},
+	loadedAnimations: {},
+} as any
 
-	loadedImages: [],
+export var map1 = {
+	name: "Bedroom",
+	tiles: [
+		//12x8
+		[2, 1, 1, 1, 2],
+		[3, 0, 0, 0, 1],
+		[1, 0, 0, 0, 3],
+		[1, 0, 0, 0, 1],
+		[2, 1, 1, 1, 2],
+	],
+	interactable: [{ coordinates: [1, 3] }],
+	decoration: [{ coordinates: [1, 2] }],
+	changeSceneCondition: (map: any, player: any, p5: any) => {
+		if (
+			pixelsToMapSize(player.x, map.size) === 0 &&
+			pixelsToMapSize(player.y, map.size) === 1 &&
+			player.rot === 90 &&
+			p5.kb.presses("space")
+		) {
+			return "Bathroom"
+		}
+		if (
+			pixelsToMapSize(player.x, map.size) === 3 &&
+			pixelsToMapSize(player.y, map.size) === 1 &&
+			player.rot === 270 &&
+			p5.kb.presses("space")
+		) {
+			return "Hallway"
+		}
+	},
+	size: 100,
+	scale: 1,
+	imgs: {
+		0: "src/assets/floor_300_wood.png",
+		1: "src/assets/wall_300_clean.png",
+		2: "src/assets/wall_300_corner.png",
+		3: "src/assets/wall_300_door.png",
+	},
+	animations: {
+		0: {
+			name: "brownDoor",
+			frames: 11,
+			img: "src/assets/door_450_520_brown.png",
+			frameDelay: 10,
+			frameSize: [450, 520],
+			scale: 5,
+			looping: false,
+			onComplete: () => {
+				console.log("DONE!!!!!!!!!!")
+			},
+		},
+	},
+	playerStart: (coordinates: any) => coordinates || [1, 1],
+	loadedImages: {},
+	loadedAnimations: {},
 } as any
 
 export function drawMap(
@@ -57,21 +148,31 @@ export function drawMap(
 }
 export var player: any = {
 	animations: [
-		{ name: "idle", frames: 59, img: "src/assets/character_900_idle.png" },
-		{ name: "walk", frames: 37, img: "src/assets/character_900_walk.png" },
+		{
+			name: "idle",
+			frames: 59,
+			img: "src/assets/character_900_idle.png",
+			frameDelay: 1,
+		},
+		{
+			name: "walk",
+			frames: 37,
+			img: "src/assets/character_900_walk.png",
+			frameDelay: -1.4,
+		},
 	],
 	currentAnimation: "idle",
 	x: 1,
 	y: 1,
 	dir: 1, // -1 is north, 1 is going to be south
 	rot: 0, // -1 is going to be west facing, 1 is going to be east
-	speed: 3,
+	speed: 2.5,
 	acceleration: 0.1, // moving? (speed = 1) or backwards (speed = 0).
 	moveSpeed: 0.1, // how far (in map units) does the player move each step/update
 	rotSpeed: (3 * Math.PI) / 180, // how much does the player rotate each step/update (in radians)
 }
 
-export const loadAnimations = (p5: any, player: any) => {
+export const loadPlayerAnimations = (p5: any, player: any) => {
 	var animations: any = []
 	let ani
 
@@ -79,7 +180,7 @@ export const loadAnimations = (p5: any, player: any) => {
 		ani = p5.loadAni(animationObject.img, {
 			frameSize: [900, 900],
 			frames: animationObject.frames,
-			frameDelay: 0,
+			frameDelay: animationObject.frameDelay,
 		})
 		animations.push(ani)
 	})
@@ -145,9 +246,4 @@ export function playPlayerAnimations(p5: any, char: any) {
 		char.x += char.speed
 		char.rot = 270
 	}
-
-	logger(0, `${char.x}`, "Player x")
-	logger(1, `${char.y}`, "Player y")
-	logger(2, `${pixelsToMapSize(char.x, map1.size)}`, "Player x converted")
-	logger(3, `${pixelsToMapSize(char.y, map1.size)}`, "Player y converted")
 }

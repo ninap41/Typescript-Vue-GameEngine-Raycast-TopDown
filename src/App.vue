@@ -52,9 +52,9 @@ const classStringLink =
 				</div>
 			</nav>
 
-			<section class="flex items-center flex-1">
+			<!-- <section class="flex items-center flex-1">
 				<div class="flex flex-col w-full">
-					<h1 class="text-5xl font-extrabold text-center lg:text-7xl 2xl:text-8xl">
+					<p class="text-5xl font-extrabold text-center lg:text-7xl 2xl:text-8xl">
 						<span
 							class="text-transparent bg-gradient-to-br bg-clip-text from-purple-500 via-green-500 to-sky-500 dark:from-teal-200 dark:via-indigo-300 dark:to-sky-500"
 						>
@@ -66,20 +66,18 @@ const classStringLink =
 						>
 							Haunting
 						</span>
-					</h1>
+					</p>
 
 					<p
 						class="max-w-3xl mx-auto mt-6 text-lg text-center text-gray-700 dark:text-white md:text-xl"
 					></p>
 					<div id="log" class="text-white"></div>
 
-					<!-- 
 					<p
 						class="mt-8 text-center text-gray-700 dark:text-white text-md md:text-xl"
-					>
-					</p> -->
+					></p>
 				</div>
-			</section>
+			</section> -->
 			<main>
 				<RouterView />
 			</main>
