@@ -97,6 +97,7 @@ export const fadeIn = (p5: any, animation: any) => {
 
 	fade += fadeAmount * 0.04
 }
+
 export const arrayOf9ths = [9, 18, 27, 36, 45, 54, 63]
 /**
  * Returns a boolean to tell if tile character is FACING is passible
@@ -125,4 +126,32 @@ export const logger = (child: number, value: any, prefix?: any) => {
 	var output = document.getElementById("output")?.children[child]
 
 	if (output && st) output.innerHTML = prefix ? `${prefix} : ${st}` : st // log what I want
+}
+
+export const debuggerTool = (type: any, game: any, p5?: any) => {
+	logger(0, `${game.player.x}`, "Player x")
+	logger(1, `${game.player.y}`, "Player y")
+	logger(2, `${game.player.rot}`, "Rotation degrees")
+	logger(
+		3,
+		`${pixelsToMapSize(game.player.x, game.rooms[game.currentRoom].size)}`,
+		"Player x converted"
+	)
+	logger(
+		4,
+		`${pixelsToMapSize(game.player.y, game.rooms[game.currentRoom].size)}`,
+		"Player y converted"
+	)
+	logger(5, `${game.currentRoom}`, "current room")
+
+	logger(
+		6,
+		`mouseX: ${p5.mouseX} / ${pixelsToMapSize(
+			p5.mouseX,
+			game.rooms[game.currentRoom].size
+		)} mouseY: ${p5.mouseY} / ${pixelsToMapSize(
+			p5.mouseY,
+			game.rooms[game.currentRoom].size
+		)}`
+	)
 }
