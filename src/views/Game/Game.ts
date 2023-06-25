@@ -1,4 +1,4 @@
-import { map1, map2 } from "./maps"
+import { map1, map2, map3 } from "./Maps"
 import { storeToRefs } from "pinia"
 import { useCounterStore } from "@/stores/counter"
 import { defineComponent, onMounted, ref, computed } from "vue"
@@ -11,9 +11,9 @@ import {
 	arrayOf9ths,
 	fadeIn,
 	debuggerTool,
-} from "./utility"
-import { template } from "./Scene"
-import * as animations from "./animations"
+} from "../utility"
+import { gameCycle } from "./Scene"
+// import * as animations from "./animations"
 
 export class Game {
 	startingRoomKey: any
@@ -55,7 +55,7 @@ export class Game {
 	rooms = {
 		Bathroom: map2,
 		Bedroom: map1,
-		Hallway: map2,
+		Hallway: map3,
 	} as any
 	currentRoom:
 		| "Bedroom"
@@ -80,7 +80,8 @@ export class Game {
 	startGame() {
 		if (this.gameStart === true) {
 			window.document.getElementById("defaultCanvas0")?.remove() // @ts-ignore
-			this.sketch = new p5(template(this))
+			this.sketch = new p5(gameCycle(this))
+			console.log(this.sketch)
 		}
 	}
 
@@ -89,11 +90,9 @@ export class Game {
 			p5,
 			this.loadedPlayer
 		)
-		this.loadImages(this.rooms.Bathroom, p5)
-		this.loadImages(this.rooms.Bedroom, p5)
 
-		this.loadDoorAnimations(this.rooms.Bathroom, p5)
-		this.loadDoorAnimations(this.rooms.Bedroom, p5)
+		this.loadRooms(p5)
+		this.loadStaticAssets(p5)
 	}
 
 	setup(p5: any) {
@@ -103,6 +102,12 @@ export class Game {
 		p5.angleMode(p5.DEGREES)
 	}
 
+	private loadRooms(p5: any) {
+		Object.keys(this.rooms).forEach((key: string) => {
+			this.loadImages(this.rooms[key], p5)
+			this.loadDoorAnimations(this.rooms[key], p5)
+		})
+	}
 	async draw(p5: any) {
 		p5.clear()
 		p5.background(51)
@@ -137,9 +142,13 @@ export class Game {
 				if (
 					map.changeSceneCondition(map, this.player, p5) === "Bathroom -> Bedroom"
 				) {
+					console.log("yeah!")
 					this.cutscene = { state: true, ref: "Bathroom -> Bedroom" }
 				}
 
+				this.drawMap(map, "topDown", p5)
+				this.playPlayerAnimations(p5, this.loadedPlayer)
+			} else if (this.currentRoom === "Hallway") {
 				this.drawMap(map, "topDown", p5)
 				this.playPlayerAnimations(p5, this.loadedPlayer)
 			} else {
@@ -150,7 +159,6 @@ export class Game {
 	}
 
 	public drawMap(map: any, type: "topDown" | "raycast" | "sideScroll", p5: any) {
-		p5.resize
 		map.tiles.forEach((row: any, y_: any) => {
 			row.forEach((tile: any, x_: any) => {
 				let XY = undefined
@@ -190,6 +198,11 @@ export class Game {
 			map.loadedImages[key] = p5.loadImage(map.imgs[key])
 		})
 	}
+
+	private loadStaticAssets(map: any, p5: any) {}
+
+	private loadLoopingAssets(map: any, p5: any) {}
+
 	public loadDoorAnimations(map: any, p5: any) {
 		Object.keys(map.animations).forEach((key: any) => {
 			map.loadedAnimations[map.animations[key].name] = p5.loadAni(
@@ -294,8 +307,10 @@ export class Game {
 		this.currentRoom = roomChange
 		this.player.x = newPlayerCoordinates[0]
 		this.player.y = newPlayerCoordinates[1]
+		this.player.rot = newPlayerCoordinates[2]
 		this.cutscene = false
 		const map = this.getMap()
+		console.log(map)
 
 		p5.resizeCanvas(map.tiles[0].length * map.size, map.tiles.length * map.size)
 	}

@@ -18,11 +18,11 @@ import {
 	arrayOf9ths,
 	fadeIn,
 	debuggerTool,
-} from "./utility"
-import { template } from "./Scene"
-import * as animations from "./animations"
+} from "../utility"
+import { gameCycle } from "./Scene"
+// import * as animations from "./animations"
 
-import { map1, map2 } from "./maps"
+import { map1, map2 } from "./Maps"
 import { Game } from "./Game"
 
 // storeGame https://p5js.org/reference/#/p5/storeItem
@@ -48,3 +48,4 @@ onMounted(async () => {
 	margin: 0 auto;
 }
 </style>
+./Maps

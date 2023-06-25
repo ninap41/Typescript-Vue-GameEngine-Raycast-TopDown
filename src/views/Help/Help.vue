@@ -12,10 +12,8 @@
 import { storeToRefs } from "pinia"
 import { useCounterStore } from "@/stores/counter"
 import { defineComponent, onMounted, ref, computed } from "vue"
-import { template } from "./Scene"
-import { clearCanvas } from "./utility"
-
-async function makeCanvas(choice?: string, changeScene?: any) {}
+import { gameCycle } from "../Game/Scene"
+import { clearCanvas } from "../utility"
 
 onMounted(() => {
 	clearCanvas()

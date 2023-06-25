@@ -65,7 +65,7 @@ export const clearCanvas = () => {
 }
 
 export const pixelsToMapSize = (value: number, size: number) => {
-	return Math.ceil(value / size)
+	return Math.abs(Math.ceil(value / size))
 }
 export function reinitializeChangeScene(scene: any) {
 	window.document.getElementById("defaultCanvas0")?.remove()
@@ -120,7 +120,6 @@ const passable = (
 ) => {
 	// do
 }
-
 export const logger = (child: number, value: any, prefix?: any) => {
 	const st: any = String(value)
 	var output = document.getElementById("output")?.children[child]
@@ -152,6 +151,6 @@ export const debuggerTool = (type: any, game: any, p5?: any) => {
 		)} mouseY: ${p5.mouseY} / ${pixelsToMapSize(
 			p5.mouseY,
 			game.rooms[game.currentRoom].size
-		)}`
+		)} Player Direction ${game.loadedPlayer.rot}`
 	)
 }
