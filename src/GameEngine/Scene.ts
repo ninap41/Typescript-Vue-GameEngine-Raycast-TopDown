@@ -1,17 +1,3 @@
-// import * as p5 from "p5"
-import {
-	tileRotationAndLocation,
-	rotationConditions,
-	toRadians,
-	logger,
-	pixelsToMapSize,
-	getLighting,
-	fadeIn,
-} from "../utility"
-import { map1, map2 } from "./Maps"
-
-var loadedPlayer: any
-
 // https://editor.p5js.org/ericalimsongyi/sketches/lzo9sfBjW
 // https://editor.p5js.org/codingtrain/sketches/vhnFx1mml
 

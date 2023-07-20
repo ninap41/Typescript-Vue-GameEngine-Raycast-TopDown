@@ -12,8 +12,7 @@
 import { storeToRefs } from "pinia"
 import { useCounterStore } from "@/stores/counter"
 import { defineComponent, onMounted, ref, computed } from "vue"
-import { gameCycle } from "../Game/Scene"
-import { clearCanvas } from "../utility"
+import { clearCanvas } from "../../scripts/utils"
 
 onMounted(() => {
 	clearCanvas()

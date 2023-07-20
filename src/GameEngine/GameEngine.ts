@@ -1,21 +1,13 @@
-import { map1, map2, map3 } from "./Maps"
-import { storeToRefs } from "pinia"
-import { useCounterStore } from "@/stores/counter"
-import { defineComponent, onMounted, ref, computed } from "vue"
+import { map1, map2, map3 } from "@/GameEngine/Maps"
 import {
 	tileRotationAndLocation,
-	rotationConditions,
-	toRadians,
-	logger,
-	pixelsToMapSize,
-	arrayOf9ths,
 	fadeIn,
 	debuggerTool,
-} from "../utility"
-import { gameCycle } from "./Scene"
+} from "@/scripts/utils"
+import { gameCycle } from "@/GameEngine/Scene"
 // import * as animations from "./animations"
 
-export class Game {
+export class GameEngine {
 	startingRoomKey: any
 	sketch: any
 	player: any = {
@@ -57,15 +49,8 @@ export class Game {
 		Bedroom: map1,
 		Hallway: map3,
 	} as any
-	currentRoom:
-		| "Bedroom"
-		| "Bathroom"
-		| "DoorAnimation"
-		| "Hallway"
-		| "Kitchen"
-		| "Living Room"
-		| "Parents Room"
-		| any
+	map: any
+	currentRoom: "Bedroom" | "Bathroom" | "DoorAnimation" | "Hallway" | "Kitchen" | "Living Room" | "Parents Room" | any
 
 	constructor(startingRoomKey: any, mapChange?: any) {
 		this.currentRoom = startingRoomKey
@@ -86,26 +71,59 @@ export class Game {
 	}
 
 	preload(p5: any) {
-		this.loadedPlayer.animations = this.loadPlayerAnimations(
-			p5,
-			this.loadedPlayer
-		)
-
+		this.loadPlayerAnimations(p5, this.loadedPlayer)
 		this.loadRooms(p5)
-		this.loadStaticAssets(p5)
 	}
 
 	setup(p5: any) {
-		const map = this.getMap()
-		p5.createCanvas(map.tiles[0].length * map.size, map.tiles.length * map.size)
-		p5.background(51)
+		this.map = this.getMap()
+		p5.createCanvas(this.map.tiles[0].length * this.map.size, this.map.tiles.length * this.map.size)
 		p5.angleMode(p5.DEGREES)
 	}
 
 	private loadRooms(p5: any) {
 		Object.keys(this.rooms).forEach((key: string) => {
-			this.loadImages(this.rooms[key], p5)
-			this.loadDoorAnimations(this.rooms[key], p5)
+			// iterate over all the rooms on the game map!
+
+			// load room Tiles
+			const map = this.rooms[key]
+			Object.keys(map.imgs).forEach((key: any) => {
+				console.log(map.imgs[key], "IMAGE EXAMPLE")
+				map.loadedImages[key] = p5.loadImage(map.imgs[key])
+			})
+			// Door Animations
+			Object.keys(map.animations).forEach((animationKey: any) => {
+				map.loadedAnimations[map.animations[animationKey].name] = p5.loadAni(map.animations[animationKey].img, {
+					//ex brown door
+					frameSize: [map.animations[animationKey].frameSize[0], map.animations[animationKey].frameSize[1]],
+					frames: map.animations[animationKey].frames,
+					frameDelay: map.animations[animationKey].frameDelay,
+					scale: map.animations[animationKey].scale,
+				})
+				const ani = map.loadedAnimations[map.animations[animationKey].name]
+				map.loadedAnimations[map.animations[animationKey].name].looping = ani.looping
+				map.loadedAnimations[map.animations[animationKey].name].onComplete = async () => {
+					p5.clear()
+					await map.animations[animationKey].onComplete(this, p5)
+				}
+			})
+			// loadAssets for room inside
+			Object.keys(map.staticImages).forEach((key2: any) => {
+				if (map.staticImages) {
+					console.log(`-------------this.rooms[key].staticImages`)
+					console.log(map.staticImages)
+					console.log("-------------this.rooms[key].staticImages[key2]")
+
+					console.log("KEY:", key)
+					console.log("KEY2:", key2)
+					map.loadedStaticImages[key2] = {}
+					map.loadedStaticImages[key2] = p5.loadImage(map.staticImages[key2].img)
+				} else {
+					console.log("noStaticImages")
+				}
+				console.log(map.staticImages, "static")
+				console.log(map.loadedImages, "loaded")
+			})
 		})
 	}
 	async draw(p5: any) {
@@ -120,35 +138,33 @@ export class Game {
 			})
 		} else {
 			if (this.currentRoom === "Bedroom") {
+				p5.clear()
 				this.drawMap(map, "topDown", p5)
+				this.drawAssets(map, "topDown", p5)
 				this.playPlayerAnimations(p5, this.loadedPlayer)
-				if (
-					map.changeSceneCondition(map, this.player, p5) === "Bedroom -> Bathroom"
-				) {
+				if (map.changeSceneCondition(map, this.player, p5) === "Bedroom -> Bathroom") {
 					this.cutscene = { state: true, ref: "Bedroom -> Bathroom" }
 				}
-				if (
-					map.changeSceneCondition(map, this.player, p5) === "Bedroom -> Hallway"
-				) {
+				if (map.changeSceneCondition(map, this.player, p5) === "Bedroom -> Hallway") {
 					this.cutscene = { state: true, ref: "Bedroom -> Hallway" }
 				}
 			} else if (this.currentRoom === "Bathroom") {
 				p5.clear()
-				if (
-					map.changeSceneCondition(map, this.player, p5) === "Bathroom -> Hallway"
-				) {
+				if (map.changeSceneCondition(map, this.player, p5) === "Bathroom -> Hallway") {
 					this.cutscene = { state: true, ref: "Bathroom -> Hallway" }
 				}
-				if (
-					map.changeSceneCondition(map, this.player, p5) === "Bathroom -> Bedroom"
-				) {
-					console.log("yeah!")
+				if (map.changeSceneCondition(map, this.player, p5) === "Bathroom -> Bedroom") {
 					this.cutscene = { state: true, ref: "Bathroom -> Bedroom" }
 				}
 
 				this.drawMap(map, "topDown", p5)
 				this.playPlayerAnimations(p5, this.loadedPlayer)
 			} else if (this.currentRoom === "Hallway") {
+				p5.clear()
+				if (map.changeSceneCondition(map, this.player, p5) === "Hallway -> Bedroom") {
+					this.cutscene = { state: true, ref: "Hallway -> Bedroom" }
+				}
+
 				this.drawMap(map, "topDown", p5)
 				this.playPlayerAnimations(p5, this.loadedPlayer)
 			} else {
@@ -177,6 +193,17 @@ export class Game {
 			})
 		})
 	}
+
+	public drawAssets(map: any, type: "topDown" | "raycast" | "sideScroll", p5: any) {
+		// iterate over static images
+
+		Object.keys(map.loadedStaticImages).forEach((assetKey: any) => {
+			console.log(map.loadedStaticImages[assetKey])
+			// p5.image(map.loadedImages[asset], XY[0], XY[1], map.size, map.size)
+		})
+		// p5.image(map.loadedStaticImages, XY[0], XY[1], map.size, map.size)
+	}
+
 	private loadPlayerAnimations = (p5: any, player: any) => {
 		var animations: any = []
 		let ani
@@ -189,42 +216,7 @@ export class Game {
 			})
 			animations.push(ani)
 		})
-
-		return animations
-	}
-
-	private loadImages(map: any, p5: any) {
-		Object.keys(map.imgs).forEach((key: any) => {
-			map.loadedImages[key] = p5.loadImage(map.imgs[key])
-		})
-	}
-
-	private loadStaticAssets(map: any, p5: any) {}
-
-	private loadLoopingAssets(map: any, p5: any) {}
-
-	public loadDoorAnimations(map: any, p5: any) {
-		Object.keys(map.animations).forEach((key: any) => {
-			map.loadedAnimations[map.animations[key].name] = p5.loadAni(
-				map.animations[key].img,
-				{
-					//ex brown door
-					frameSize: [
-						map.animations[key].frameSize[0],
-						map.animations[key].frameSize[1],
-					],
-					frames: map.animations[key].frames,
-					frameDelay: map.animations[key].frameDelay,
-					scale: map.animations[key].scale,
-				}
-			)
-			const ani = map.loadedAnimations[map.animations[key].name]
-			map.loadedAnimations[map.animations[key].name].looping = ani.looping
-			map.loadedAnimations[map.animations[key].name].onComplete = async () => {
-				p5.clear()
-				await map.animations[key].onComplete(this, p5)
-			}
-		})
+		this.loadedPlayer.animations = animations
 	}
 
 	public playAnimation(animationKey: string, source: any, p5: any) {
@@ -309,9 +301,9 @@ export class Game {
 		this.player.y = newPlayerCoordinates[1]
 		this.player.rot = newPlayerCoordinates[2]
 		this.cutscene = false
-		const map = this.getMap()
-		console.log(map)
+		this.map = this.getMap()
+		console.log(this.map)
 
-		p5.resizeCanvas(map.tiles[0].length * map.size, map.tiles.length * map.size)
+		p5.resizeCanvas(this.map.tiles[0].length * this.map.size, this.map.tiles.length * this.map.size)
 	}
 }

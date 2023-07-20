@@ -1,4 +1,9 @@
 <template>
+	<ul v-for="stuff in stuffToDo">
+		<li>
+			<h1>{{ stuff }}</h1>
+		</li>
+	</ul>
 	<div v-if="game">
 		<h2>{{ game.currentRoom }}</h2>
 		<div class="game"></div>
@@ -18,24 +23,23 @@ import {
 	arrayOf9ths,
 	fadeIn,
 	debuggerTool,
-} from "../utility"
-import { gameCycle } from "./Scene"
-// import * as animations from "./animations"
-
-import { map1, map2 } from "./Maps"
-import { Game } from "./Game"
+} from "../scripts/utils"
+// @ts-ignore
+import { GameEngine } from "@/GameEngine/GameEngine"
 
 // storeGame https://p5js.org/reference/#/p5/storeItem
 
-var game: Game
+var game: GameEngine
+
+const stuffToDo = ["fix map sizing"]
 
 onMounted(async () => {
-	game = await new Game("Bedroom")
+	game = await new GameEngine("Bedroom")
 	game.startGame()
 })
 </script>
 
-<style>
+<style scoped>
 @media (min-width: 1024px) {
 	.about {
 		min-height: 100vh;
@@ -43,9 +47,11 @@ onMounted(async () => {
 		align-items: center;
 	}
 }
+* {
+	color: white;
+}
 
 #defaultCanvas0 {
 	margin: 0 auto;
 }
 </style>
-./Maps
