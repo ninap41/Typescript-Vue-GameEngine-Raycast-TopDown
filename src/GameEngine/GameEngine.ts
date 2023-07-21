@@ -3,7 +3,6 @@ import { tileRotationAndLocation, fadeIn, debuggerTool } from "@/scripts/utils"
 import { gameCycle } from "@/GameEngine/Scene"
 import { TheBeginning } from "@/Scenes/the-beginning"
 // import * as animations from "./animations"
-
 export class GameEngine {
 	startingRoomKey: any
 	sketch: any
@@ -24,8 +23,8 @@ export class GameEngine {
 			},
 		],
 		currentAnimation: "idle",
-		x: 1,
-		y: 1,
+		x: 5,
+		y: 200,
 		dir: 1, // -1 is north, 1 is going to be south
 		rot: 0, // -1 is going to be west facing, 1 is going to be east
 		speed: 2.5,
@@ -46,6 +45,7 @@ export class GameEngine {
 		Bathroom: map2,
 		Bedroom: map1,
 		Hallway: map3,
+		Kitchen: map2,
 	} as any
 	map: any
 	currentRoom: "Bedroom" | "Bathroom" | "DoorAnimation" | "Hallway" | "Kitchen" | "Living Room" | "Parents Room" | any
@@ -58,6 +58,7 @@ export class GameEngine {
 	}
 
 	private getMap() {
+		this.currentRoom === undefined ? alert("currentRoom Not Defined.") : ""
 		return this.rooms[this.currentRoom as any] as any
 	}
 
@@ -109,19 +110,11 @@ export class GameEngine {
 			// loadAssets for room inside
 			Object.keys(map.staticImages).forEach((key2: any) => {
 				if (map.staticImages) {
-					console.log(`-------------this.rooms[key].staticImages`)
-					console.log(map.staticImages)
-					console.log("-------------this.rooms[key].staticImages[key2]")
-
-					console.log("KEY:", key)
-					console.log("KEY2:", key2)
 					map.loadedStaticImages[key2] = {}
 					map.loadedStaticImages[key2] = p5.loadImage(map.staticImages[key2].img)
 				} else {
-					console.log("noStaticImages")
+					alert("no static images for this map")
 				}
-				console.log(map.staticImages, "static")
-				console.log(map.loadedImages, "loaded")
 			})
 		})
 	}
@@ -131,6 +124,7 @@ export class GameEngine {
 		const map = this.getMap()
 		if (this.cutscene.state) {
 			fadeIn(p5, () => {
+				// instance of a sprite animation, not creating and moving things on p5
 				this.playAnimation(this.cutscene.ref, map.loadedAnimations, p5)
 			})
 		} else {
@@ -139,6 +133,7 @@ export class GameEngine {
 			this.drawMap(map, "topDown", p5)
 			this.drawAssets(map, "topDown", p5)
 			this.playPlayerAnimations(p5, this.loadedPlayer)
+
 			this.loadedPlayer.phase(this, p5)
 		}
 		debuggerTool("player", this, p5)
@@ -168,10 +163,14 @@ export class GameEngine {
 		// iterate over static images
 
 		Object.keys(map.loadedStaticImages).forEach((assetKey: any) => {
-			console.log(map.loadedStaticImages[assetKey])
-			// p5.image(map.loadedImages[asset], XY[0], XY[1], map.size, map.size)
+			p5.image(
+				map.loadedStaticImages[assetKey],
+				map.staticImages[assetKey].XY[0] * map.size,
+				map.staticImages[assetKey].XY[1] * map.size,
+				map.staticImages[assetKey].size[0],
+				map.staticImages[assetKey].size[1]
+			)
 		})
-		// p5.image(map.loadedStaticImages, XY[0], XY[1], map.size, map.size)
 	}
 
 	private loadPlayerAnimations = (p5: any, player: any) => {
@@ -193,7 +192,6 @@ export class GameEngine {
 		const map = this.getMap()
 
 		//example: ("brownDoor", map.loadedAnimations, p5)
-		console.log(source[animationKey], "Animation key for brown door")
 		return p5.animation(
 			source[animationKey], //SpriteAnim
 			(map.tiles[0].length * map.size) / 2, //position of the animation on the canvas
@@ -272,7 +270,8 @@ export class GameEngine {
 		this.player.rot = newPlayerCoordinates[2]
 		this.cutscene = false
 		this.map = this.getMap()
-		console.log(this.map)
+
+		this.map === undefined ? alert("You forgot to add the new room to the map.") : ""
 
 		p5.resizeCanvas(this.map.tiles[0].length * this.map.size, this.map.tiles.length * this.map.size)
 	}

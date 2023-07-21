@@ -18,39 +18,26 @@ export class Map {
 	}
 	loadedImages: any = {}
 	// assets
-	staticImages = {
-		desk: {
-			img: "src/assets/bedroom_desk.png",
-			size: [],
-			xy: [],
-			animated: false,
-		},
-		bed: { img: "src/assets/bedroom_bed.png", size: [], xy: [], animated: false },
-	}
+	staticImages: any = []
 	loadedStaticImages: any = {}
 	// transition animations and others
 	animations: any = { ...genericDoorAnimations }
 	loadedAnimations: any = {}
-
 	playerStart: any
-	constructor(name: any, tiles: any, changeSceneCondition: any) {
+	constructor(name: any, tiles: any) {
 		this.name = name
 		this.tiles = tiles
-		this.changeSceneCondition = changeSceneCondition || null
-		// this.changeSceneCondition = this.getChangeSceneCondition
-	}
-
-	getChangeSceneConditions() {}
-
-	setChangeSceneConditions() {
 		if (this.name === "Bedroom") {
-		}
-		if (this.name === "Bathroom") {
-		}
-		if (this.name === "Hallway") {
-		}
-		if (this.name === "Kitchen") {
-			alert("you didnt add change scene conditions for this")
+			this.staticImages = {
+				desk: {
+					img: "src/assets/bedroom_desk.png",
+					size: [100, 180],
+					XY: [3 - 0.1, 1 - 0.6],
+					animated: false,
+				},
+				bed: { img: "src/assets/bedroom_bed.png", size: [180, 90], XY: [1 - 0.5, 1 - 0.1], animated: false },
+				// window: { img: "src/assets/bedroom_bed.png", size: [180, 90], XY: [1 - 0.5, 1 - 0.1], animated: false },
+			}
 		}
 	}
 }

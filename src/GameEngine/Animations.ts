@@ -11,23 +11,23 @@ export const genericDoorAnimations = {
 	"Bedroom -> Bathroom": {
 		name: "Bedroom -> Bathroom",
 		...generic,
-		onComplete: (gameInstance: any, p5: any) => {
-			gameInstance.rerenderCanvas("Bathroom", [2, 2, 270], p5)
+		onComplete: (game: any, p5: any) => {
+			game.rerenderCanvas("Bathroom", [2, 2, 270], p5)
 		},
 	},
 	"Bathroom -> Bedroom": {
 		name: "Bathroom -> Bedroom",
 		...generic,
-		onComplete: (gameInstance: any, p5: any) => {
-			gameInstance.rerenderCanvas("Bedroom", [2, 2, 270], p5)
+		onComplete: (game: any, p5: any) => {
+			game.rerenderCanvas("Bedroom", [2, 2, 270], p5)
 		},
 	},
 
 	"Bedroom -> Hallway": {
 		name: "Bedroom -> Hallway",
 		...generic,
-		onComplete: (gameInstance: any, p5: any) => {
-			gameInstance.rerenderCanvas("Hallway", [2, 2, 270], p5)
+		onComplete: (game: any, p5: any) => {
+			game.rerenderCanvas("Hallway", [2, 2, 270], p5)
 		},
 	},
 
@@ -35,8 +35,16 @@ export const genericDoorAnimations = {
 		//{...load door animations as }
 		name: "Hallway -> Bedroom",
 		...generic,
-		onComplete: (gameInstance: any, p5: any) => {
-			gameInstance.rerenderCanvas("Bedroom", [2, 2, 90], p5)
+		onComplete: (game: any, p5: any) => {
+			game.rerenderCanvas("Bedroom", [2, 2, 90], p5)
+		},
+	},
+	"Hallway -> Kitchen": {
+		//{...load door animations as }
+		name: "Hallway -> Bedroom",
+		...generic,
+		onComplete: (game: any, p5: any) => {
+			game.rerenderCanvas("Kitchen", [2, 2, 90], p5)
 		},
 	},
 }

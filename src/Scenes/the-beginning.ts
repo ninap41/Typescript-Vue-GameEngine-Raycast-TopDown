@@ -2,48 +2,65 @@ import type { GameEngine } from "@/GameEngine/GameEngine"
 import { pixelsToMapSize } from "@/scripts/utils"
 
 const doorChangeConditions: any = {
-	Bedroom: (game: GameEngine, p5: any) => {
+	Bathroom: (game: GameEngine, p5: any) => {
 		if (
 			pixelsToMapSize(game.player.x, game.map.size) === 3 &&
 			pixelsToMapSize(game.player.y, game.map.size) === 1 &&
 			game.player.rot === 270 &&
 			p5.kb.presses("space")
 		) {
+			game.cutscene = { state: true, ref: "Bathroom -> Bedroom" }
+		}
+	},
+	Bedroom: (game: GameEngine, p5: any) => {
+		if (
+			pixelsToMapSize(game.player.x, game.map.size) === 0 &&
+			pixelsToMapSize(game.player.y, game.map.size) === 3 &&
+			game.player.rot === 90 &&
+			p5.kb.presses("space")
+		) {
 			game.cutscene = { state: true, ref: "Bedroom -> Bathroom" }
 		}
-		if (game.map.changeSceneCondition(game.map, game.player) === "Bedroom -> Hallway") {
+		if (
+			pixelsToMapSize(game.player.x, game.map.size) === 3 &&
+			pixelsToMapSize(game.player.y, game.map.size) === 1 &&
+			game.player.rot === 270 &&
+			p5.kb.presses("space")
+		) {
 			game.cutscene = { state: true, ref: "Bedroom -> Hallway" }
 		}
 	},
-}
-export const TheBeginning = (game: GameEngine, p5: any) => {
-	if (game.currentRoom === "Bedroom") {
-		if (game.map.changeSceneCondition(game.map, game.player, p5) === "Bedroom -> Bathroom") {
-			game.cutscene = { state: true, ref: "Bedroom -> Bathroom" }
-		}
-		if (game.map.changeSceneCondition(game.map, game.player, p5) === "Bedroom -> Hallway") {
-			game.cutscene = { state: true, ref: "Bedroom -> Hallway" }
-		}
-	} else if (game.currentRoom === "Bathroom") {
-		p5.clear()
-		if (game.map.changeSceneCondition(game.map, game.player, p5) === "Bathroom -> Hallway") {
-			game.cutscene = { state: true, ref: "Bathroom -> Hallway" }
-		}
-		if (game.map.changeSceneCondition(game.map, game.player, p5) === "Bathroom -> Bedroom") {
-			game.cutscene = { state: true, ref: "Bathroom -> Bedroom" }
-		}
-
-		game.drawMap(game.map, "topDown", p5)
-		game.playPlayerAnimations(p5, game.loadedPlayer)
-	} else if (game.currentRoom === "Hallway") {
-		p5.clear()
-		if (game.map.changeSceneCondition(game.map, game.player, p5) === "Hallway -> Bedroom") {
+	Hallway: (game: GameEngine, p5: any) => {
+		if (
+			pixelsToMapSize(game.player.x, game.map.size) === 0 &&
+			pixelsToMapSize(game.player.y, game.map.size) === 0 &&
+			game.player.rot === 90 &&
+			p5.kb.presses("space")
+		) {
 			game.cutscene = { state: true, ref: "Hallway -> Bedroom" }
 		}
+		if (
+			pixelsToMapSize(game.player.x, game.map.size) === 0 &&
+			pixelsToMapSize(game.player.y, game.map.size) === 4 &&
+			game.player.rot === 0 &&
+			p5.kb.presses("space")
+		) {
+			game.cutscene = { state: true, ref: "Hallway -> Kitchen" }
+		}
+	},
+}
 
-		game.drawMap(game.map, "topDown", p5)
-		game.playPlayerAnimations(p5, game.loadedPlayer)
+const eventConditions: any = {}
+export const TheBeginning = (game: GameEngine, p5: any) => {
+	if (game.currentRoom === "Bedroom") {
+		doorChangeConditions[game.currentRoom](game, p5)
+	} else if (game.currentRoom === "Bathroom") {
+		doorChangeConditions[game.currentRoom](game, p5)
+	} else if (game.currentRoom === "Hallway") {
+		doorChangeConditions[game.currentRoom](game, p5)
+	} else if (game.currentRoom === "Kitchen") {
+		doorChangeConditions[game.currentRoom](game, p5)
 	} else {
-		console.log("No room ")
+		alert("No room. You done goofed, Nina. Good luck figuring this one out!")
 	}
 }
