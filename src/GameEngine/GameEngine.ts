@@ -1,16 +1,14 @@
 import { map1, map2, map3 } from "@/GameEngine/Maps"
-import {
-	tileRotationAndLocation,
-	fadeIn,
-	debuggerTool,
-} from "@/scripts/utils"
+import { tileRotationAndLocation, fadeIn, debuggerTool } from "@/scripts/utils"
 import { gameCycle } from "@/GameEngine/Scene"
+import { TheBeginning } from "@/Scenes/the-beginning"
 // import * as animations from "./animations"
 
 export class GameEngine {
 	startingRoomKey: any
 	sketch: any
 	player: any = {
+		phase: (game: GameEngine, p5: any) => TheBeginning(game, p5),
 		animations: [
 			{
 				name: "idle",
@@ -62,7 +60,8 @@ export class GameEngine {
 	private getMap() {
 		return this.rooms[this.currentRoom as any] as any
 	}
-	startGame() {
+
+	private startGame() {
 		if (this.gameStart === true) {
 			window.document.getElementById("defaultCanvas0")?.remove() // @ts-ignore
 			this.sketch = new p5(gameCycle(this))
@@ -70,12 +69,12 @@ export class GameEngine {
 		}
 	}
 
-	preload(p5: any) {
+	public preload(p5: any) {
 		this.loadPlayerAnimations(p5, this.loadedPlayer)
 		this.loadRooms(p5)
 	}
 
-	setup(p5: any) {
+	public setup(p5: any) {
 		this.map = this.getMap()
 		p5.createCanvas(this.map.tiles[0].length * this.map.size, this.map.tiles.length * this.map.size)
 		p5.angleMode(p5.DEGREES)
@@ -131,45 +130,16 @@ export class GameEngine {
 		p5.background(51)
 		const map = this.getMap()
 		if (this.cutscene.state) {
-			//current room is door animation and now Bathroom
-			//door animation loader
 			fadeIn(p5, () => {
 				this.playAnimation(this.cutscene.ref, map.loadedAnimations, p5)
 			})
 		} else {
-			if (this.currentRoom === "Bedroom") {
-				p5.clear()
-				this.drawMap(map, "topDown", p5)
-				this.drawAssets(map, "topDown", p5)
-				this.playPlayerAnimations(p5, this.loadedPlayer)
-				if (map.changeSceneCondition(map, this.player, p5) === "Bedroom -> Bathroom") {
-					this.cutscene = { state: true, ref: "Bedroom -> Bathroom" }
-				}
-				if (map.changeSceneCondition(map, this.player, p5) === "Bedroom -> Hallway") {
-					this.cutscene = { state: true, ref: "Bedroom -> Hallway" }
-				}
-			} else if (this.currentRoom === "Bathroom") {
-				p5.clear()
-				if (map.changeSceneCondition(map, this.player, p5) === "Bathroom -> Hallway") {
-					this.cutscene = { state: true, ref: "Bathroom -> Hallway" }
-				}
-				if (map.changeSceneCondition(map, this.player, p5) === "Bathroom -> Bedroom") {
-					this.cutscene = { state: true, ref: "Bathroom -> Bedroom" }
-				}
-
-				this.drawMap(map, "topDown", p5)
-				this.playPlayerAnimations(p5, this.loadedPlayer)
-			} else if (this.currentRoom === "Hallway") {
-				p5.clear()
-				if (map.changeSceneCondition(map, this.player, p5) === "Hallway -> Bedroom") {
-					this.cutscene = { state: true, ref: "Hallway -> Bedroom" }
-				}
-
-				this.drawMap(map, "topDown", p5)
-				this.playPlayerAnimations(p5, this.loadedPlayer)
-			} else {
-				console.log("No room ")
-			}
+			/* Game Running */
+			p5.clear()
+			this.drawMap(map, "topDown", p5)
+			this.drawAssets(map, "topDown", p5)
+			this.playPlayerAnimations(p5, this.loadedPlayer)
+			this.loadedPlayer.phase(this, p5)
 		}
 		debuggerTool("player", this, p5)
 	}

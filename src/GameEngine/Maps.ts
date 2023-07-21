@@ -51,7 +51,6 @@ export var map2 = new Map(
 	],
 	(map: any, player: any, p5: any) => {
 		// console.log("change from bathroom")
-
 		if (
 			pixelsToMapSize(player.x, map.size) === 3 &&
 			pixelsToMapSize(player.y, map.size) === 1 &&

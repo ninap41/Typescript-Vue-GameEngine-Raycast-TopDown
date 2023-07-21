@@ -5,7 +5,7 @@ const router = createRouter({
 	routes: [
 		{
 			path: "/",
-			name: "home", //@ts-ignore
+			name: "game", //@ts-ignore
 			component: () => import("@/views/Game.vue"),
 			props: true,
 		},

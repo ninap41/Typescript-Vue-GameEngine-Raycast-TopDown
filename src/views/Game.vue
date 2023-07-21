@@ -11,19 +11,8 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia"
-import { useCounterStore } from "@/stores/counter"
-import { defineComponent, onMounted, ref, computed } from "vue"
-import {
-	tileRotationAndLocation,
-	rotationConditions,
-	toRadians,
-	logger,
-	pixelsToMapSize,
-	arrayOf9ths,
-	fadeIn,
-	debuggerTool,
-} from "../scripts/utils"
+import { onMounted } from "vue"
+import {} from "../scripts/utils"
 // @ts-ignore
 import { GameEngine } from "@/GameEngine/GameEngine"
 

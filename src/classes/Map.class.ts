@@ -1,8 +1,8 @@
+import { TheBeginning } from "@/Scenes/the-beginning"
 import { genericDoorAnimations } from "../GameEngine/Animations"
 
 export class Map {
 	name: any
-
 	tiles: any
 	// interactable: any
 	changeSceneCondition: any
@@ -37,5 +37,20 @@ export class Map {
 		this.name = name
 		this.tiles = tiles
 		this.changeSceneCondition = changeSceneCondition || null
+		// this.changeSceneCondition = this.getChangeSceneCondition
+	}
+
+	getChangeSceneConditions() {}
+
+	setChangeSceneConditions() {
+		if (this.name === "Bedroom") {
+		}
+		if (this.name === "Bathroom") {
+		}
+		if (this.name === "Hallway") {
+		}
+		if (this.name === "Kitchen") {
+			alert("you didnt add change scene conditions for this")
+		}
 	}
 }
