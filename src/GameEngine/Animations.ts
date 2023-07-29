@@ -4,22 +4,33 @@ const generic = {
 	frames: 11,
 	frameSize: [450, 520],
 	scale: 5,
+	type: "door",
 	looping: false,
 }
+
+// export const playerMapCoordinatedToPixelSize = (arr: Array<any>, mapSize: number) => {
+// 	arr[0] = Math.abs(Math.ceil(arr[0] * mapSize))
+// 	arr[1] = Math.abs(Math.ceil(arr[1] * mapSize))
+// 	console.log("ARR!")
+// 	console.log(arr[0])
+// 	console.log(arr[2])
+
+// 	return [arr[0], arr[1], arr[2]]
+// }
 
 export const genericDoorAnimations = {
 	"Bedroom -> Bathroom": {
 		name: "Bedroom -> Bathroom",
 		...generic,
 		onComplete: (game: any, p5: any) => {
-			game.rerenderCanvas("Bathroom", [2, 2, 270], p5)
+			game.rerenderCanvas("Bathroom", [215, 1, 90], p5)
 		},
 	},
 	"Bathroom -> Bedroom": {
 		name: "Bathroom -> Bedroom",
 		...generic,
 		onComplete: (game: any, p5: any) => {
-			game.rerenderCanvas("Bedroom", [2, 2, 270], p5)
+			game.rerenderCanvas("Bedroom", [0, 200, 270], p5)
 		},
 	},
 
@@ -32,16 +43,15 @@ export const genericDoorAnimations = {
 	},
 
 	"Hallway -> Bedroom": {
-		//{...load door animations as }
 		name: "Hallway -> Bedroom",
 		...generic,
 		onComplete: (game: any, p5: any) => {
-			game.rerenderCanvas("Bedroom", [2, 2, 90], p5)
+			game.rerenderCanvas("Bedroom", [200, 94, 90], p5)
 		},
 	},
 	"Hallway -> Kitchen": {
 		//{...load door animations as }
-		name: "Hallway -> Bedroom",
+		name: "Hallway -> Kitchen",
 		...generic,
 		onComplete: (game: any, p5: any) => {
 			game.rerenderCanvas("Kitchen", [2, 2, 90], p5)

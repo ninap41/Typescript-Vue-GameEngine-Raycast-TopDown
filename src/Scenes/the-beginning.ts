@@ -1,4 +1,5 @@
 import type { GameEngine } from "@/GameEngine/GameEngine"
+import { map1, map2, map3 } from "@/GameEngine/Maps"
 import { pixelsToMapSize } from "@/scripts/utils"
 
 const doorChangeConditions: any = {
@@ -37,6 +38,8 @@ const doorChangeConditions: any = {
 			game.player.rot === 90 &&
 			p5.kb.presses("space")
 		) {
+			alert("Hallway -> Bedroom")
+
 			game.cutscene = { state: true, ref: "Hallway -> Bedroom" }
 		}
 		if (
@@ -45,12 +48,19 @@ const doorChangeConditions: any = {
 			game.player.rot === 0 &&
 			p5.kb.presses("space")
 		) {
+			alert("Hallway -> Kitchen")
 			game.cutscene = { state: true, ref: "Hallway -> Kitchen" }
 		}
 	},
 }
 
 const eventConditions: any = {}
+export var beginning_rooms = {
+	Bathroom: map2,
+	Bedroom: map1,
+	Hallway: map3,
+}
+
 export const TheBeginning = (game: GameEngine, p5: any) => {
 	if (game.currentRoom === "Bedroom") {
 		doorChangeConditions[game.currentRoom](game, p5)

@@ -1,3 +1,5 @@
+import type { GameEngine } from "@/GameEngine/GameEngine"
+
 export const toRadians = (degrees: number) => degrees * (Math.PI / 180)
 
 export const rotationConditions = (
@@ -13,8 +15,7 @@ export const rotationConditions = (
 			wall: () => x === map.tiles[0].length - 1,
 		},
 		180: {
-			corner: (): boolean =>
-				x === map.tiles[0].length - 1 && y === map.tiles.length - 1,
+			corner: (): boolean => x === map.tiles[0].length - 1 && y === map.tiles.length - 1,
 			wall: () => y === map.tiles.length - 1,
 		},
 		270: {
@@ -67,6 +68,10 @@ export const clearCanvas = () => {
 export const pixelsToMapSize = (value: number, size: number) => {
 	return Math.abs(Math.ceil(value / size))
 }
+
+export const mapToPixelSize = (value: number, size: number) => {
+	return Math.abs(Math.ceil(value * size))
+}
 export function reinitializeChangeScene(scene: any) {
 	window.document.getElementById("defaultCanvas0")?.remove()
 }
@@ -112,12 +117,7 @@ export const arrayOf9ths = [9, 18, 27, 36, 45, 54, 63]
  *
  * @beta
  */
-const passable = (
-	character: Array<number>,
-	direction: any,
-	map: number,
-	passibleUnits: Array<number>
-) => {
+const passable = (character: Array<number>, direction: any, map: number, passibleUnits: Array<number>) => {
 	// do
 }
 export const logger = (child: number, value: any, prefix?: any) => {
@@ -127,30 +127,40 @@ export const logger = (child: number, value: any, prefix?: any) => {
 	if (output && st) output.innerHTML = prefix ? `${prefix} : ${st}` : st // log what I want
 }
 
-export const debuggerTool = (type: any, game: any, p5?: any) => {
+export const distanceTool = (p5: any) => {
+	let x1: number
+	let y1: number
+	let x2: number
+	let y2: number
+	p5.mousePressed = async () => {
+		x1 = p5.mouseX
+		y1 = p5.mouseY
+	}
+	p5.mouseReleased = async () => {
+		p5.line(x1, y1, x2, y2)
+		p5.fill("red")
+		x2 = p5.mouseX
+		y2 = p5.mouseY
+		p5.line(x1, y1, x2, y2)
+		let content = `Distance: ${Math.floor(p5.dist(x1, y1, x2, y2))}px.... Coordinates: x: ${Math.floor(
+			p5.mouseX
+		)} y: ${Math.floor(p5.mouseY)}`
+		alert(content)
+	}
+}
+
+export const debuggerTool = (type: any, game: GameEngine, p5?: any) => {
 	logger(0, `${game.player.x}`, "Player x")
 	logger(1, `${game.player.y}`, "Player y")
 	logger(2, `${game.player.rot}`, "Rotation degrees")
-	logger(
-		3,
-		`${pixelsToMapSize(game.player.x, game.rooms[game.currentRoom].size)}`,
-		"Player x converted"
-	)
-	logger(
-		4,
-		`${pixelsToMapSize(game.player.y, game.rooms[game.currentRoom].size)}`,
-		"Player y converted"
-	)
+	logger(3, `${pixelsToMapSize(game.player.x, game.rooms[game.currentRoom].size)}`, "Player x converted")
+	logger(4, `${pixelsToMapSize(game.player.y, game.rooms[game.currentRoom].size)}`, "Player y converted")
 	logger(5, `${game.currentRoom}`, "current room")
 
 	logger(
 		6,
-		`mouseX: ${p5.mouseX} / ${pixelsToMapSize(
-			p5.mouseX,
-			game.rooms[game.currentRoom].size
-		)} mouseY: ${p5.mouseY} / ${pixelsToMapSize(
-			p5.mouseY,
-			game.rooms[game.currentRoom].size
-		)} Player Direction ${game.loadedPlayer.rot}`
+		`mouseX: ${p5.mouseX} / ${pixelsToMapSize(p5.mouseX, game.rooms[game.currentRoom].size)} mouseY: ${
+			p5.mouseY
+		} / ${pixelsToMapSize(p5.mouseY, game.rooms[game.currentRoom].size)} Player Direction ${game.player.rot}`
 	)
 }

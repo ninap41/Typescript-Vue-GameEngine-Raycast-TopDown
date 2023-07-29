@@ -75,6 +75,12 @@ export class Player {
 			this.y -= this.speed
 			this.rot = 180
 		}
+		if (p5.kb.pressing("ArrowUp") || p5.kb.pressing("w") || p5.kb.pressing("ArrowLeft" || p5.kb.pressing("a"))) {
+			console.log("yo")
+			this.y -= this.speed
+			this.x -= this.speed
+			this.rot = 135
+		}
 		if (p5.kb.pressing("ArrowDown") || p5.kb.pressing("s")) {
 			this.y += this.speed
 			this.rot = 0

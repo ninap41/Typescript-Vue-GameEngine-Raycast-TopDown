@@ -1,8 +1,7 @@
-import { map1, map2, map3 } from "@/GameEngine/Maps"
-import { tileRotationAndLocation, fadeIn, debuggerTool } from "@/scripts/utils"
+import { tileRotationAndLocation, fadeIn, debuggerTool, pixelsToMapSize, mapToPixelSize } from "@/scripts/utils"
 import { gameCycle } from "@/GameEngine/Scene"
-import { TheBeginning } from "@/Scenes/the-beginning"
-// import * as animations from "./animations"
+import { TheBeginning, beginning_rooms } from "@/Scenes/the-beginning"
+
 export class GameEngine {
 	startingRoomKey: any
 	sketch: any
@@ -30,7 +29,7 @@ export class GameEngine {
 		speed: 2.5,
 		acceleration: 0.1, // moving? (speed = 1) or backwards (speed = 0).
 		moveSpeed: 0.1, // how far (in map units) does the player move each step/update
-		rotSpeed: (3 * Math.PI) / 180, // how much does the player rotate each step/update (in radians)
+		rotSpeed: 5, // how much does the player rotate each step/update (in radians)
 	}
 	gameStart: any
 	fade = 0
@@ -41,24 +40,23 @@ export class GameEngine {
 		state: false,
 		ref: null,
 	}
-	rooms = {
-		Bathroom: map2,
-		Bedroom: map1,
-		Hallway: map3,
-		Kitchen: map2,
-	} as any
+	rooms: any // instead of PHASE for now
 	map: any
 	currentRoom: "Bedroom" | "Bathroom" | "DoorAnimation" | "Hallway" | "Kitchen" | "Living Room" | "Parents Room" | any
 
 	constructor(startingRoomKey: any, mapChange?: any) {
+		this.rooms = beginning_rooms
+
 		this.currentRoom = startingRoomKey
 		this.gameStart = true
-		this.loadedPlayer = this.player
-		this.startGame
+		//this.player
+		this.map = this.rooms[this.currentRoom]
+		this.startGame()
 	}
 
 	private getMap() {
 		this.currentRoom === undefined ? alert("currentRoom Not Defined.") : ""
+		console.log(this.rooms[this.currentRoom as any])
 		return this.rooms[this.currentRoom as any] as any
 	}
 
@@ -71,7 +69,7 @@ export class GameEngine {
 	}
 
 	public preload(p5: any) {
-		this.loadPlayerAnimations(p5, this.loadedPlayer)
+		this.loadPlayerAnimations(p5, this.player)
 		this.loadRooms(p5)
 	}
 
@@ -121,22 +119,24 @@ export class GameEngine {
 	async draw(p5: any) {
 		p5.clear()
 		p5.background(51)
-		const map = this.getMap()
 		if (this.cutscene.state) {
 			fadeIn(p5, () => {
 				// instance of a sprite animation, not creating and moving things on p5
-				this.playAnimation(this.cutscene.ref, map.loadedAnimations, p5)
+				this.playAnimation(this.cutscene.ref, this.map.loadedAnimations, p5)
 			})
 		} else {
 			/* Game Running */
 			p5.clear()
-			this.drawMap(map, "topDown", p5)
-			this.drawAssets(map, "topDown", p5)
-			this.playPlayerAnimations(p5, this.loadedPlayer)
+			if (this.map === undefined) {
+				this.map = this.rooms[`${this.currentRoom}`]
+			} else {
+				this.drawMap(this.map, "topDown", p5)
+				this.drawAssets(this.map, "topDown", p5)
+				this.playPlayerAnimations(p5, this.player)
 
-			this.loadedPlayer.phase(this, p5)
+				this.player.phase(this, p5)
+			}
 		}
-		debuggerTool("player", this, p5)
 	}
 
 	public drawMap(map: any, type: "topDown" | "raycast" | "sideScroll", p5: any) {
@@ -185,7 +185,7 @@ export class GameEngine {
 			})
 			animations.push(ani)
 		})
-		this.loadedPlayer.animations = animations
+		this.player.animations = animations
 	}
 
 	public playAnimation(animationKey: string, source: any, p5: any) {
@@ -204,14 +204,12 @@ export class GameEngine {
 	}
 
 	public playPlayerAnimations(p5: any, char: any) {
-		// p5.noLoop()
 		const characterAnimation = {
 			walk: () =>
 				p5.animation(
 					char.animations[1], //SpriteAnim
-					char.x + 1 * (map1.size + map1.size / 2), //position of the animation on the canvas
-
-					char.y + 1 * (map1.size + map1.size / 2), //position of the animation on the canvas
+					char.x + 1 * (this.map.size + this.map.size / 2), //position of the animation on the canvas
+					char.y + 1 * (this.map.size + this.map.size / 2), //position of the animation on the canvas
 					char.rot, //rotation
 					0.1, // scale
 					0.1 // scale
@@ -219,9 +217,9 @@ export class GameEngine {
 			idle: () =>
 				p5.animation(
 					char.animations[0], //SpriteAnim
-					char.x + 1 * (map1.size + map1.size / 2), //position of the animation on the canvas
+					char.x + 1 * (this.map.size + this.map.size / 2), //position of the animation on the canvas
 
-					char.y + 1 * (map1.size + map1.size / 2), //position of the animation on the canvas
+					char.y + 1 * (this.map.size + this.map.size / 2), //position of the animation on the canvas
 					char.rot, //rotation
 					0.1, // scale
 					0.1 // scale
@@ -245,33 +243,62 @@ export class GameEngine {
 			characterAnimation.idle()
 		}
 
-		if (p5.kb.pressing("ArrowUp") || p5.kb.pressing("w")) {
+		if (p5.kb.holding("ArrowUp") && p5.kb.holding("ArrowLeft")) {
+			console.log("yo")
+			char.y -= char.speed
+			char.x -= char.speed
+			if (char.rot !== 135) {
+				char.rot -= 5
+			}
+		} else if (p5.kb.holding("ArrowRight") && p5.kb.holding("ArrowUp")) {
+			char.y -= char.speed
+			char.x += char.speed
+			if (char.rot !== 225) {
+				char.rot += 5
+			}
+		} else if (p5.kb.pressing("ArrowRight") && p5.kb.pressing("ArrowDown")) {
+			char.y += char.speed
+			char.x += char.speed
+			if (char.rot !== 315) {
+				char.rot = 315
+			}
+		} else if (p5.kb.pressing("ArrowLeft") && p5.kb.pressing("ArrowDown")) {
+			char.y += char.speed
+			char.x -= char.speed
+			if (char.rot !== 45) {
+				char.rot = 45
+			}
+		} else if (p5.kb.pressing("ArrowUp")) {
 			char.y -= char.speed
 			char.rot = 180
-		}
-		if (p5.kb.pressing("ArrowDown") || p5.kb.pressing("s")) {
-			char.y += this.loadedPlayer.speed
-			char.rot = 0
-		}
-		if (p5.kb.pressing("ArrowLeft" || p5.kb.pressing("a"))) {
+		} else if (p5.kb.pressing("ArrowLeft")) {
 			char.x -= char.speed
 			char.rot = 90
-		}
-		if (p5.kb.pressing("ArrowRight") || p5.kb.pressing("d")) {
+		} else if (p5.kb.pressing("ArrowRight")) {
 			char.x += char.speed
 			char.rot = 270
+		} else if (p5.kb.pressing("ArrowDown")) {
+			char.y += char.speed
+			char.rot = 0
 		}
 	}
 
 	async rerenderCanvas(roomChange: any, newPlayerCoordinates: any, p5: any) {
 		this.currentRoom = roomChange
-		this.player.x = newPlayerCoordinates[0]
-		this.player.y = newPlayerCoordinates[1]
-		this.player.rot = newPlayerCoordinates[2]
 		this.cutscene = false
 		this.map = this.getMap()
 
-		this.map === undefined ? alert("You forgot to add the new room to the map.") : ""
+		alert(newPlayerCoordinates[0])
+		alert(newPlayerCoordinates[1])
+		this.player.x = newPlayerCoordinates[0]
+		// mapToPixelSize(newPlayerCoordinates[0], this.map.size)
+
+		this.player.y = newPlayerCoordinates[1]
+		// mapToPixelSize(newPlayerCoordinates[1], this.map.size)
+
+		this.player.rot = newPlayerCoordinates[2]
+
+		this.cutscene = false
 
 		p5.resizeCanvas(this.map.tiles[0].length * this.map.size, this.map.tiles.length * this.map.size)
 	}

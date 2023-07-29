@@ -8,7 +8,7 @@ import {
 } from "@/scripts/utils"
 import { Map } from "@/classes/Map.class"
 
-export var map3 = new Map("Hallway", [
+export const map3 = new Map("Hallway", [
 	//12x8
 	[2, 1, 2],
 	[3, 0, 3],
@@ -18,14 +18,14 @@ export var map3 = new Map("Hallway", [
 	[2, 3, 2],
 ])
 
-export var map2 = new Map("Bathroom", [
+export const map2 = new Map("Bathroom", [
 	//12x8
 	[2, 1, 1, 1, 2],
 	[1, 0, 0, 0, 3],
 	[2, 1, 1, 1, 2],
 ])
 
-export var map1 = new Map("Bedroom", [
+export const map1 = new Map("Bedroom", [
 	//12x8
 	[2, 1, 1, 1, 2],
 	[1, 0, 0, 0, 1],
