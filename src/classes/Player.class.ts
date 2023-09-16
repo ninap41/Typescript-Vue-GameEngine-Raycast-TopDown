@@ -50,48 +50,4 @@ export class Player {
 				),
 		}
 	}
-
-	public playPlayerAnimations(p5: any, char: any) {
-		// p5.noLoop()
-		if (
-			p5.kb.pressing("ArrowUp") ||
-			p5.kb.pressing("w") ||
-			p5.kb.pressing("ArrowDown") ||
-			p5.kb.pressing("s") ||
-			p5.kb.pressing("ArrowLeft" || p5.kb.pressing("a")) ||
-			p5.kb.pressing("ArrowRight") ||
-			p5.kb.pressing("d")
-		) {
-			//https://p5play.org/docs/
-			this.currentAnimation = "walk"
-			this.characterAnimation.walk()
-			// console.log(this.animations[0])
-		} else {
-			// idle
-			this.characterAnimation.idle()
-		}
-
-		if (p5.kb.pressing("ArrowUp") || p5.kb.pressing("w")) {
-			this.y -= this.speed
-			this.rot = 180
-		}
-		if (p5.kb.pressing("ArrowUp") || p5.kb.pressing("w") || p5.kb.pressing("ArrowLeft" || p5.kb.pressing("a"))) {
-			console.log("yo")
-			this.y -= this.speed
-			this.x -= this.speed
-			this.rot = 135
-		}
-		if (p5.kb.pressing("ArrowDown") || p5.kb.pressing("s")) {
-			this.y += this.speed
-			this.rot = 0
-		}
-		if (p5.kb.pressing("ArrowLeft" || p5.kb.pressing("a"))) {
-			this.x -= this.speed
-			this.rot = 90
-		}
-		if (p5.kb.pressing("ArrowRight") || p5.kb.pressing("d")) {
-			this.x += this.speed
-			this.rot = 270
-		}
-	}
 }

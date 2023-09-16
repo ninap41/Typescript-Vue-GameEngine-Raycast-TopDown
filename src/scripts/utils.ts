@@ -1,4 +1,5 @@
 import type { GameEngine } from "@/GameEngine/GameEngine"
+import type { Map } from "@/Classes/Map.class"
 
 export const toRadians = (degrees: number) => degrees * (Math.PI / 180)
 
@@ -59,6 +60,22 @@ export const tileRotationAndLocation = (
 	}
 	p5.rotate(degrees)
 	return XY
+}
+
+export const percentageConverter = (map: Map, p5: any) => {
+	const numberOfTilesX = map.tiles[0].length
+	// const numberOfTilesY = map.tiles.length
+	const relativeUnit = Math.floor(p5.screenWidth / numberOfTilesX)
+	const difference = numberOfTilesX * relativeUnit - numberOfTilesX * map.size
+	difference > 0 ? "increase" : "decrease"
+
+	//cellSize * baselineSize=
+	//const mapWidth = mapCellNumber
+	//const mapHeight = mapcellnumber
+	//const cellSize = cellSize
+	//whatever is the largest of the two
+	//const screenwidth = p5.windowWidth
+	//Math.floor(screenWidth / mapWidth)
 }
 
 export const clearCanvas = () => {
@@ -137,15 +154,12 @@ export const distanceTool = (p5: any) => {
 		y1 = p5.mouseY
 	}
 	p5.mouseReleased = async () => {
-		p5.line(x1, y1, x2, y2)
-		p5.fill("red")
 		x2 = p5.mouseX
 		y2 = p5.mouseY
-		p5.line(x1, y1, x2, y2)
 		let content = `Distance: ${Math.floor(p5.dist(x1, y1, x2, y2))}px.... Coordinates: x: ${Math.floor(
 			p5.mouseX
 		)} y: ${Math.floor(p5.mouseY)}`
-		alert(content)
+		// alert(content)
 	}
 }
 

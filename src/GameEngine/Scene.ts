@@ -22,11 +22,7 @@ export const gameCycle = (game: any) => {
 			p5.clear()
 			game.draw(p5)
 			debuggerTool("player", game, p5)
-			distanceTool(p5)
 		}
-
-		// p5.mouseClicked = async (_: any) => {
-		// 	alert("mouse clicked") //debugger
-		// } //@ts-ignore
+		distanceTool(p5)
 	}
 }

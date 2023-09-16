@@ -9,15 +9,12 @@ const generic = {
 }
 
 // export const playerMapCoordinatedToPixelSize = (arr: Array<any>, mapSize: number) => {
-// 	arr[0] = Math.abs(Math.ceil(arr[0] * mapSize))
-// 	arr[1] = Math.abs(Math.ceil(arr[1] * mapSize))
-// 	console.log("ARR!")
-// 	console.log(arr[0])
-// 	console.log(arr[2])
+// 	arr[0] = arr[0] + 1 * (mapSize + mapSize / 2)
+
+// 	arr[1] = arr[1] + 1 * (mapSize + mapSize / 2)
 
 // 	return [arr[0], arr[1], arr[2]]
 // }
-
 export const genericDoorAnimations = {
 	"Bedroom -> Bathroom": {
 		name: "Bedroom -> Bathroom",

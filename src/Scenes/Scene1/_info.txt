@@ -1,0 +1,8 @@
+// Orange is an Inspect_
+// Yellow is Item_
+// blue is a Condition_
+// BrightGreen is an Event_
+// DarkGreen SpecialEvent_
+// Pink is opened_
+// purple is cutscene_
+// black will be combos

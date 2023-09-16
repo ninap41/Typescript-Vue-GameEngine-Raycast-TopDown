@@ -1,6 +1,14 @@
-import { tileRotationAndLocation, fadeIn, debuggerTool, pixelsToMapSize, mapToPixelSize } from "@/scripts/utils"
+import {
+	tileRotationAndLocation,
+	fadeIn,
+	debuggerTool,
+	pixelsToMapSize,
+	mapToPixelSize,
+	percentageConverter,
+} from "@/scripts/utils"
 import { gameCycle } from "@/GameEngine/Scene"
-import { TheBeginning, beginning_rooms } from "@/Scenes/the-beginning"
+import { TheBeginning, beginning_rooms } from "@/Scenes/Scene1/the-beginning"
+var sprite: any
 
 export class GameEngine {
 	startingRoomKey: any
@@ -55,8 +63,8 @@ export class GameEngine {
 	}
 
 	private getMap() {
-		this.currentRoom === undefined ? alert("currentRoom Not Defined.") : ""
-		console.log(this.rooms[this.currentRoom as any])
+		// this.currentRoom === undefined ? alert("currentRoom Not Defined.") : ""
+		// console.log(this.rooms[this.currentRoom as any])
 		return this.rooms[this.currentRoom as any] as any
 	}
 
@@ -64,19 +72,31 @@ export class GameEngine {
 		if (this.gameStart === true) {
 			window.document.getElementById("defaultCanvas0")?.remove() // @ts-ignore
 			this.sketch = new p5(gameCycle(this))
-			console.log(this.sketch)
+			// console.log(this.sketch)
 		}
+	}
+
+	public drawSprite(p5: any) {
+		sprite = new p5.Sprite()
+		sprite.color = "black"
+		sprite.y = 50
+		sprite.x = 200
+		sprite.w = 200
+		sprite.h = 50
+		sprite.textSize = 12
+		sprite.textColor = "white"
+		sprite.text = "Welcome To The Game"
 	}
 
 	public preload(p5: any) {
 		this.loadPlayerAnimations(p5, this.player)
 		this.loadRooms(p5)
 	}
-
 	public setup(p5: any) {
 		this.map = this.getMap()
 		p5.createCanvas(this.map.tiles[0].length * this.map.size, this.map.tiles.length * this.map.size)
 		p5.angleMode(p5.DEGREES)
+		this.drawSprite(p5)
 	}
 
 	private loadRooms(p5: any) {
@@ -86,7 +106,7 @@ export class GameEngine {
 			// load room Tiles
 			const map = this.rooms[key]
 			Object.keys(map.imgs).forEach((key: any) => {
-				console.log(map.imgs[key], "IMAGE EXAMPLE")
+				// console.log(map.imgs[key], "IMAGE EXAMPLE")
 				map.loadedImages[key] = p5.loadImage(map.imgs[key])
 			})
 			// Door Animations
@@ -111,7 +131,7 @@ export class GameEngine {
 					map.loadedStaticImages[key2] = {}
 					map.loadedStaticImages[key2] = p5.loadImage(map.staticImages[key2].img)
 				} else {
-					alert("no static images for this map")
+					// alert("no static images for this map")
 				}
 			})
 		})
@@ -119,6 +139,9 @@ export class GameEngine {
 	async draw(p5: any) {
 		p5.clear()
 		p5.background(51)
+		if (sprite.mouse.pressed()) {
+			sprite.remove()
+		}
 		if (this.cutscene.state) {
 			fadeIn(p5, () => {
 				// instance of a sprite animation, not creating and moving things on p5
@@ -133,26 +156,34 @@ export class GameEngine {
 				this.drawMap(this.map, "topDown", p5)
 				this.drawAssets(this.map, "topDown", p5)
 				this.playPlayerAnimations(p5, this.player)
-
 				this.player.phase(this, p5)
 			}
 		}
 	}
 
 	public drawMap(map: any, type: "topDown" | "raycast" | "sideScroll", p5: any) {
+		/* only have top down support atm*/
+		// console.log(map)
+		// console.log
+		const ratio = percentageConverter(map, p5)
 		map.tiles.forEach((row: any, y_: any) => {
 			row.forEach((tile: any, x_: any) => {
 				let XY = undefined
 				p5.push()
 				if (tile === 2) {
+					XY = [x_ * map.size, y_ * map.size]
+					p5.image(map.loadedImages[0], XY[0], XY[1], map.size, map.size) /*add floor to space*/
+
 					XY = tileRotationAndLocation(map, x_, y_, tile, "corner", p5) /*corners */
-				} else if (tile === 1 || tile === 4) {
+				} else if (tile === 1 || tile === 4 || tile === 3) {
+					XY = [x_ * map.size, y_ * map.size]
+					p5.image(map.loadedImages[0], XY[0], XY[1], map.size, map.size) /*add floor to space */
 					XY = tileRotationAndLocation(map, x_, y_, tile, "wall", p5) /* walls */
-				} else if (tile === 3) {
-					XY = tileRotationAndLocation(map, x_, y_, tile, "wall", p5) /* door */
 				} else {
+					/* tile === 0 */
 					XY = [x_ * map.size, y_ * map.size]
 				}
+
 				p5.image(map.loadedImages[tile], XY[0], XY[1], map.size, map.size)
 				p5.pop()
 			})
@@ -244,7 +275,7 @@ export class GameEngine {
 		}
 
 		if (p5.kb.holding("ArrowUp") && p5.kb.holding("ArrowLeft")) {
-			console.log("yo")
+			// console.log("yo")
 			char.y -= char.speed
 			char.x -= char.speed
 			if (char.rot !== 135) {
@@ -288,8 +319,8 @@ export class GameEngine {
 		this.cutscene = false
 		this.map = this.getMap()
 
-		alert(newPlayerCoordinates[0])
-		alert(newPlayerCoordinates[1])
+		// alert(newPlayerCoordinates[0])
+		// alert(newPlayerCoordinates[1])
 		this.player.x = newPlayerCoordinates[0]
 		// mapToPixelSize(newPlayerCoordinates[0], this.map.size)
 

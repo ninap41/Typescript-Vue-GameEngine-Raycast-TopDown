@@ -1,41 +1,58 @@
-import { TheBeginning } from "@/Scenes/the-beginning"
+import { TheBeginning } from "@/Scenes/Scene1/the-beginning"
 import { genericDoorAnimations } from "../GameEngine/Animations"
 
+const BathroomAssets = {
+	tiles: {
+		// tile ref
+		0: `src/assets/tiles/floor_300_tile.png`,
+		1: `src/assets/tiles/wall_300_floral.png`,
+		2: `src/assets/tiles/wall_300_floral_corner.png`, // 2 is the corner
+		3: `src/assets/tiles/wall_300_floral.png`, // 3 is a door, but render door as wall so door can be an object
+	},
+	items: {},
+}
 export const BedroomAssets = {
 	tiles: {
 		// tile ref
-		0: "src/assets/walls/floor_300_wood.png",
-		1: "src/assets/walls/wall_300_clean.png",
-		2: "src/assets/walls/wall_300_corner.png", // 2 is the corner
-		3: "src/assets/walls/wall_300_door.png", // 3 is a door
+		0: `src/assets/tiles/floor_300_wood.png`,
+		1: `src/assets/tiles/wall_300_clean.png`,
+		2: `src/assets/tiles/wall_300_corner.png`, // 2 is the corner
+		3: `src/assets/tiles/wall_300_clean.png`, // 3 is a door, but render door as wall so door can be an object
 	},
 	items: {
-		rug: {
-			img: "src/assets/bedroom/bedroom_rug.png",
-			size: [290, 300],
-			XY: [1, 1 - 0.2],
-			animated: false,
-			shownConditions: [],
-			interactions: () => {},
-		},
-		window: {
-			img: "src/assets/bedroom/bedroom_window_view_day.png",
-			size: [143, 85],
-			XY: [1.7, 0.15],
-			animated: false,
-			shownConditions: [],
-			interactions: () => {},
-		},
-		desk: {
-			img: "src/assets/bedroom/bedroom_desk.png",
-			size: [90, 170],
-			XY: [3.1, 1 - 0.6],
-			animated: false,
-			shownConditions: [],
-			interactions: () => {},
-		},
-		bed: { img: "src/assets/bedroom/bedroom_bed.png", size: [190, 100], XY: [1 - 0.5, 1 - 0.1], animated: false },
-		// window: { img: "src/assets/bedroom_bed.png", size: [180, 90], XY: [1 - 0.5, 1 - 0.1], animated: false },
+		// door1: {
+		// 	img: "src/assets/bedroom/bedroom_window_view_day.png",
+		// 	size: [143, 85],
+		// 	XY: [1.7, 0.15],
+		// 	animated: false,
+		// 	shownConditions: [],
+		// 	interactions: () => {},
+		// },
+		// rug: {
+		// 	img: "src/assets/bedroom/bedroom_rug.png",
+		// 	size: [290, 300],
+		// 	XY: [1, 1 - 0.2],
+		// 	animated: false,
+		// 	shownConditions: [],
+		// 	interactions: () => {},
+		// },
+		// window: {
+		// 	img: "src/assets/bedroom/bedroom_window_view_day.png",
+		// 	size: [143, 85],
+		// 	XY: [1.7, 0.15],
+		// 	animated: false,
+		// 	shownConditions: [],
+		// 	interactions: () => {},
+		// },
+		// desk: {
+		// 	img: "src/assets/bedroom/bedroom_desk.png",
+		// 	size: [90, 170],
+		// 	XY: [3.1, 1 - 0.6],
+		// 	animated: false,
+		// 	shownConditions: [],
+		// 	interactions: () => {},
+		// },
+		// bed: { img: "src/assets/bedroom/bedroom_bed.png", size: [190, 100], XY: [1 - 0.5, 1 - 0.1], animated: false },
 	},
 }
 
@@ -65,3 +82,29 @@ export class Map {
 		}
 	}
 }
+
+export const map3 = new Map("Hallway", [
+	//12x8
+	[2, 1, 2],
+	[3, 0, 3],
+	[1, 0, 1],
+	[1, 0, 1],
+	[1, 0, 1],
+	[2, 3, 2],
+])
+
+export const map2 = new Map("Bathroom", [
+	//12x8
+	[2, 1, 1, 1, 2],
+	[1, 0, 0, 0, 3],
+	[2, 1, 1, 1, 2],
+])
+
+export const map1 = new Map("Bedroom", [
+	//12x8
+	[2, 1, 1, 1, 2],
+	[1, 0, 0, 0, 1],
+	[1, 0, 0, 0, 3],
+	[3, 0, 0, 0, 1],
+	[2, 1, 1, 1, 2],
+])

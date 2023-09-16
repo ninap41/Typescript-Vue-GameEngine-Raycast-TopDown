@@ -1,5 +1,5 @@
 import type { GameEngine } from "@/GameEngine/GameEngine"
-import { map1, map2, map3 } from "@/GameEngine/Maps"
+import { map1, map2, map3 } from "@/Classes/Map.class"
 import { pixelsToMapSize } from "@/scripts/utils"
 
 const doorChangeConditions: any = {
@@ -38,7 +38,7 @@ const doorChangeConditions: any = {
 			game.player.rot === 90 &&
 			p5.kb.presses("space")
 		) {
-			alert("Hallway -> Bedroom")
+			// alert("Hallway -> Bedroom")
 
 			game.cutscene = { state: true, ref: "Hallway -> Bedroom" }
 		}
@@ -48,7 +48,7 @@ const doorChangeConditions: any = {
 			game.player.rot === 0 &&
 			p5.kb.presses("space")
 		) {
-			alert("Hallway -> Kitchen")
+			// alert("Hallway -> Kitchen")
 			game.cutscene = { state: true, ref: "Hallway -> Kitchen" }
 		}
 	},
