@@ -27,7 +27,7 @@ const stuffToDo = [
 ]
 
 onMounted(async () => {
-	game = await new GameEngine("Bedroom")
+	game = await new GameEngine("Basement")
 })
 </script>
 

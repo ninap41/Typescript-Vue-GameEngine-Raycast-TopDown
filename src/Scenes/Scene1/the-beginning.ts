@@ -1,5 +1,5 @@
 import type { GameEngine } from "@/GameEngine/GameEngine"
-import { map1, map2, map3 } from "@/Classes/Map.class"
+import { map1, map2, map3, map4, map5, map6 } from "@/Classes/Map.class"
 import { pixelsToMapSize } from "@/scripts/utils"
 
 const doorChangeConditions: any = {
@@ -51,6 +51,23 @@ const doorChangeConditions: any = {
 			// alert("Hallway -> Kitchen")
 			game.cutscene = { state: true, ref: "Hallway -> Kitchen" }
 		}
+		if (
+			pixelsToMapSize(game.player.x, game.map.size) === 0 &&
+			pixelsToMapSize(game.player.y, game.map.size) === 1 &&
+			game.player.rot === 0 &&
+			p5.kb.presses("space")
+		) {
+			// alert("Hallway -> Kitchen")
+			game.cutscene = { state: true, ref: "Hallway -> Parent's Room" }
+		}
+		if (
+			pixelsToMapSize(game.player.x, game.map.size) === 0 &&
+			pixelsToMapSize(game.player.y, game.map.size) === 2 &&
+			game.player.rot === 0 &&
+			p5.kb.presses("space")
+		) {
+			game.cutscene = { state: true, ref: "Hallway -> Basement" }
+		}
 	},
 }
 
@@ -59,6 +76,9 @@ export var beginning_rooms = {
 	Bathroom: map2,
 	Bedroom: map1,
 	Hallway: map3,
+	Kitchen: map5,
+	"Parent's Room": map4,
+	Basement: map6,
 }
 
 export const TheBeginning = (game: GameEngine, p5: any) => {
@@ -69,6 +89,10 @@ export const TheBeginning = (game: GameEngine, p5: any) => {
 	} else if (game.currentRoom === "Hallway") {
 		doorChangeConditions[game.currentRoom](game, p5)
 	} else if (game.currentRoom === "Kitchen") {
+		doorChangeConditions[game.currentRoom](game, p5)
+	} else if (game.currentRoom === "Parent's Room") {
+		doorChangeConditions[game.currentRoom](game, p5)
+	} else if (game.currentRoom === "Basement") {
 		doorChangeConditions[game.currentRoom](game, p5)
 	} else {
 		alert("No room. You done goofed, Nina. Good luck figuring this one out!")

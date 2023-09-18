@@ -83,6 +83,22 @@ export class Map {
 	}
 }
 
+export const map1 = new Map("Bedroom", [
+	//12x8
+	[2, 1, 1, 1, 2],
+	[1, 0, 0, 0, 1],
+	[1, 0, 0, 0, 3],
+	[3, 0, 0, 0, 1],
+	[2, 1, 1, 1, 2],
+])
+
+export const map2 = new Map("Bathroom", [
+	//12x8
+	[2, 1, 1, 1, 2],
+	[1, 0, 0, 0, 3],
+	[2, 1, 1, 1, 2],
+])
+
 export const map3 = new Map("Hallway", [
 	//12x8
 	[2, 1, 2],
@@ -93,18 +109,32 @@ export const map3 = new Map("Hallway", [
 	[2, 3, 2],
 ])
 
-export const map2 = new Map("Bathroom", [
-	//12x8
-	[2, 1, 1, 1, 2],
-	[1, 0, 0, 0, 3],
-	[2, 1, 1, 1, 2],
-])
-
-export const map1 = new Map("Bedroom", [
+export const map4 = new Map("Parent's Bedroom", [
 	//12x8
 	[2, 1, 1, 1, 2],
 	[1, 0, 0, 0, 1],
-	[1, 0, 0, 0, 3],
 	[3, 0, 0, 0, 1],
+	[1, 0, 0, 0, 1],
 	[2, 1, 1, 1, 2],
+])
+
+export const map5 = new Map("Kitchen", [
+	//12x8
+
+	[2, 1, 1, 1, 1, 2],
+	[1, 0, 0, 0, 0, 0],
+	[1, 0, 0, 0, 0, 0],
+
+	[2, 1, 1, 1, 1, 2],
+])
+
+export const map6 = new Map("Basement", [
+	//12x8
+
+	[2, 1, 1, 1, 1, 1, 2],
+	[1, 0, 0, 0, 0, 0, 1],
+	[1, 0, 0, 0, 0, 0, 1],
+	[1, 0, 0, 0, 0, 0, 1],
+	[1, 0, 0, 0, 0, 0, 1],
+	[2, 1, 1, 1, 1, 1, 2],
 ])

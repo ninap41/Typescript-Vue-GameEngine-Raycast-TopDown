@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router"
-// import HelloWorld from '@/components/HelloWorld.vue'
-
-/** Import the planck-js library (required by p5.play) */
-import Planck from "planck-js"
+import Planck from "planck-js" /** Import the planck-js library (required by p5.play) */
 import { ref } from "vue"
-
-/** Create the planck global. This is required for p5.play to load correctly */
 window.planck = Planck
 const menuOpen = ref()
 const classStringLink =

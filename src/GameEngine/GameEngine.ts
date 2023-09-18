@@ -179,6 +179,12 @@ export class GameEngine {
 					XY = [x_ * map.size, y_ * map.size]
 					p5.image(map.loadedImages[0], XY[0], XY[1], map.size, map.size) /*add floor to space */
 					XY = tileRotationAndLocation(map, x_, y_, tile, "wall", p5) /* walls */
+				} else if (tile === 8) {
+					XY = [x_ * map.size, y_ * map.size]
+					p5.fill("black")
+
+					p5.square(XY[0], XY[1], map.size, map.size) /*add floor to space */
+					p5.pop()
 				} else {
 					/* tile === 0 */
 					XY = [x_ * map.size, y_ * map.size]

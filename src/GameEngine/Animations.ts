@@ -54,4 +54,20 @@ export const genericDoorAnimations = {
 			game.rerenderCanvas("Kitchen", [2, 2, 90], p5)
 		},
 	},
+	"Hallway -> Parent's Room": {
+		//{...load door animations as }
+		name: "Hallway -> Parent's Room",
+		...generic,
+		onComplete: (game: any, p5: any) => {
+			game.rerenderCanvas("Parent's Room", [2, 2, 90], p5)
+		},
+	},
+	"Hallway -> Basement": {
+		//{...load door animations as }
+		name: "Hallway -> Basement",
+		...generic,
+		onComplete: (game: any, p5: any) => {
+			game.rerenderCanvas("Basement", [2, 2, 90], p5)
+		},
+	},
 }
