@@ -4,80 +4,41 @@ import { pixelsToMapSize } from "@/scripts/utils"
 
 const doorChangeConditions: any = {
 	Bathroom: (game: GameEngine, p5: any) => {
-		if (
-			pixelsToMapSize(game.player.x, game.map.size) === 3 &&
-			pixelsToMapSize(game.player.y, game.map.size) === 1 &&
-			game.player.rot === 270 &&
-			p5.kb.presses("space")
-		) {
+		if (game.doorChangeConditionMaker(3, 1, 270, "space", p5)) {
 			game.cutscene = { state: true, ref: "Bathroom -> Bedroom" }
 		}
 	},
 	Bedroom: (game: GameEngine, p5: any) => {
-		if (
-			pixelsToMapSize(game.player.x, game.map.size) === 0 &&
-			pixelsToMapSize(game.player.y, game.map.size) === 3 &&
-			game.player.rot === 90 &&
-			p5.kb.presses("space")
-		) {
+		if (game.doorChangeConditionMaker(0, 3, 90, "space", p5)) {
 			game.cutscene = { state: true, ref: "Bedroom -> Bathroom" }
 		}
-		if (
-			pixelsToMapSize(game.player.x, game.map.size) === 3 &&
-			pixelsToMapSize(game.player.y, game.map.size) === 1 &&
-			game.player.rot === 270 &&
-			p5.kb.presses("space")
-		) {
+		if (game.doorChangeConditionMaker(3, 1, 270, "space", p5)) {
 			game.cutscene = { state: true, ref: "Bedroom -> Hallway" }
 		}
 	},
 	Hallway: (game: GameEngine, p5: any) => {
-		if (
-			pixelsToMapSize(game.player.x, game.map.size) === 0 &&
-			pixelsToMapSize(game.player.y, game.map.size) === 0 &&
-			game.player.rot === 90 &&
-			p5.kb.presses("space")
-		) {
-			// alert("Hallway -> Bedroom")
-
+		if (game.doorChangeConditionMaker(0, 0, 90, "space", p5)) {
 			game.cutscene = { state: true, ref: "Hallway -> Bedroom" }
 		}
-		if (
-			pixelsToMapSize(game.player.x, game.map.size) === 0 &&
-			pixelsToMapSize(game.player.y, game.map.size) === 4 &&
-			game.player.rot === 0 &&
-			p5.kb.presses("space")
-		) {
-			// alert("Hallway -> Kitchen")
+		if (game.doorChangeConditionMaker(0, 4, 0, "space", p5)) {
 			game.cutscene = { state: true, ref: "Hallway -> Kitchen" }
 		}
-		if (
-			pixelsToMapSize(game.player.x, game.map.size) === 0 &&
-			pixelsToMapSize(game.player.y, game.map.size) === 1 &&
-			game.player.rot === 0 &&
-			p5.kb.presses("space")
-		) {
+		if (game.doorChangeConditionMaker(0, 1, 0, "space", p5)) {
 			// alert("Hallway -> Kitchen")
 			game.cutscene = { state: true, ref: "Hallway -> Parent's Room" }
 		}
-		if (
-			pixelsToMapSize(game.player.x, game.map.size) === 0 &&
-			pixelsToMapSize(game.player.y, game.map.size) === 2 &&
-			game.player.rot === 0 &&
-			p5.kb.presses("space")
-		) {
+		if (game.doorChangeConditionMaker(0, 2, 0, "space", p5)) {
 			game.cutscene = { state: true, ref: "Hallway -> Basement" }
 		}
 	},
 }
 
-const eventConditions: any = {}
 export var beginning_rooms = {
 	Bathroom: map2,
 	Bedroom: map1,
 	Hallway: map3,
-	Kitchen: map5,
 	"Parent's Room": map4,
+	Kitchen: map5,
 	Basement: map6,
 }
 

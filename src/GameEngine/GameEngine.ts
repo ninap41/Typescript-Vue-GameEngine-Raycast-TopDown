@@ -76,17 +76,17 @@ export class GameEngine {
 		}
 	}
 
-	public drawSprite(p5: any) {
-		sprite = new p5.Sprite()
-		sprite.color = "black"
-		sprite.y = 50
-		sprite.x = 200
-		sprite.w = 200
-		sprite.h = 50
-		sprite.textSize = 12
-		sprite.textColor = "white"
-		sprite.text = "Welcome To The Game"
-	}
+	// public drawTextSprite(p5: any) {
+	// 	sprite = new p5.Sprite()
+	// 	sprite.color = "black"
+	// 	sprite.y = 50
+	// 	sprite.x = 200
+	// 	sprite.w = 200
+	// 	sprite.h = 50
+	// 	sprite.textSize = 12
+	// 	sprite.textColor = "white"
+	// 	sprite.text = "Welcome To The Game"
+	// }
 
 	public preload(p5: any) {
 		this.loadPlayerAnimations(p5, this.player)
@@ -96,7 +96,7 @@ export class GameEngine {
 		this.map = this.getMap()
 		p5.createCanvas(this.map.tiles[0].length * this.map.size, this.map.tiles.length * this.map.size)
 		p5.angleMode(p5.DEGREES)
-		this.drawSprite(p5)
+		// this.drawTextSprite(p5)
 	}
 
 	private loadRooms(p5: any) {
@@ -139,9 +139,9 @@ export class GameEngine {
 	async draw(p5: any) {
 		p5.clear()
 		p5.background(51)
-		if (sprite.mouse.pressed()) {
-			sprite.remove()
-		}
+		// if (sprite.mouse.pressed()) {
+		// 	sprite.remove()
+		// }
 		if (this.cutscene.state) {
 			fadeIn(p5, () => {
 				// instance of a sprite animation, not creating and moving things on p5
@@ -208,6 +208,17 @@ export class GameEngine {
 				map.staticImages[assetKey].size[1]
 			)
 		})
+	}
+
+	public doorChangeConditionMaker(mapX: number, mapY: number, rot: number, button: string, p5: any) {
+		if (
+			pixelsToMapSize(this.player.x, this.map.size) === mapX &&
+			pixelsToMapSize(this.player.y, this.map.size) === mapY &&
+			this.player.rot === rot &&
+			p5.kb.presses(button)
+		) {
+			return true
+		}
 	}
 
 	private loadPlayerAnimations = (p5: any, player: any) => {
