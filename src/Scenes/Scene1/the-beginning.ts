@@ -1,5 +1,5 @@
 import type { GameEngine } from "@/GameEngine/GameEngine"
-import { map1, map2, map3, map4, map5, map6 } from "@/Classes/Map.class"
+import { map1, map2, map3, map4, map5, map6, map7, map8 } from "@/Classes/Map.class"
 import { pixelsToMapSize } from "@/scripts/utils"
 
 const doorChangeConditions: any = {
@@ -30,6 +30,34 @@ const doorChangeConditions: any = {
 		if (game.doorChangeConditionMaker(0, 2, 0, "space", p5)) {
 			game.cutscene = { state: true, ref: "Hallway -> Basement" }
 		}
+		if (game.doorChangeConditionMaker(0, 2, 0, "space", p5)) {
+			game.cutscene = { state: true, ref: "Hallway -> Living Room" }
+		}
+	},
+	"Parent's Room": (game: GameEngine, p5: any) => {
+		if (game.doorChangeConditionMaker(0, 0, 90, "space", p5)) {
+			game.cutscene = { state: true, ref: "Parent's Room -> Hallway" }
+		}
+	},
+	Attic: (game: GameEngine, p5: any) => {
+		if (game.doorChangeConditionMaker(0, 0, 90, "space", p5)) {
+			game.cutscene = { state: true, ref: "Attic -> Hallway" }
+		}
+	},
+	Kitchen: (game: GameEngine, p5: any) => {
+		if (game.doorChangeConditionMaker(0, 0, 90, "space", p5)) {
+			game.cutscene = { state: true, ref: "Kitchen -> Hallway" }
+		}
+	},
+	Basement: (game: GameEngine, p5: any) => {
+		if (game.doorChangeConditionMaker(0, 0, 90, "space", p5)) {
+			game.cutscene = { state: true, ref: "Basement -> Hallway" }
+		}
+	},
+	"Living Room": (game: GameEngine, p5: any) => {
+		if (game.doorChangeConditionMaker(0, 0, 90, "space", p5)) {
+			game.cutscene = { state: true, ref: "Living Room -> Hallway" }
+		}
 	},
 }
 
@@ -40,6 +68,8 @@ export var beginning_rooms = {
 	"Parent's Room": map4,
 	Kitchen: map5,
 	Basement: map6,
+	Attic: map7,
+	"Living Room": map8,
 }
 
 export const TheBeginning = (game: GameEngine, p5: any) => {
@@ -53,7 +83,11 @@ export const TheBeginning = (game: GameEngine, p5: any) => {
 		doorChangeConditions[game.currentRoom](game, p5)
 	} else if (game.currentRoom === "Parent's Room") {
 		doorChangeConditions[game.currentRoom](game, p5)
+	} else if (game.currentRoom === "Attic") {
+		doorChangeConditions[game.currentRoom](game, p5)
 	} else if (game.currentRoom === "Basement") {
+		doorChangeConditions[game.currentRoom](game, p5)
+	} else if (game.currentRoom === "Living Room") {
 		doorChangeConditions[game.currentRoom](game, p5)
 	} else {
 		alert("No room. You done goofed, Nina. Good luck figuring this one out!")

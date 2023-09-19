@@ -21,13 +21,12 @@ const stuffToDo = [
 	"* have relative map sizing based on the size of the window !!",
 	"* Be able to view canvas in window and signal on mabile to rotate device !! ",
 	"* Have a set aspect ratio",
-	"* program mobile mode with a button",
 
 	"* hit box debugger, with a drawn line in red when d is pressed",
 ]
 
 onMounted(async () => {
-	game = await new GameEngine("Bedroom")
+	game = await new GameEngine("Basement")
 })
 </script>
 

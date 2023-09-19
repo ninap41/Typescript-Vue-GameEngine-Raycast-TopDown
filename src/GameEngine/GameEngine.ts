@@ -50,7 +50,16 @@ export class GameEngine {
 	}
 	rooms: any // instead of PHASE for now
 	map: any
-	currentRoom: "Bedroom" | "Bathroom" | "DoorAnimation" | "Hallway" | "Kitchen" | "Living Room" | "Parents Room" | any
+	currentRoom:
+		| "Bedroom"
+		| "Bathroom"
+		| "DoorAnimation"
+		| "Hallway"
+		| "Kitchen"
+		| "Living Room"
+		| "Parents Room"
+		| "Attic"
+		| any
 
 	constructor(startingRoomKey: any, mapChange?: any) {
 		this.rooms = beginning_rooms
