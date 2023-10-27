@@ -69,7 +69,7 @@ const AllInspects: { [key: string]: {} } = {
 	},
 	[INSPECTS.parentsDressor]: {
 		displayName: [INSPECTS.parentsDressor],
-		location: "Parent's Room",
+		location: "Parent's Bedroom",
 		onInspect: () => {
 			// stop movement during dialogue
 			const dialogue = [{ description: "You rummaged through your parents dressor.", choice: null, next: () => {} }]

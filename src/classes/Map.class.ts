@@ -11,6 +11,27 @@ const BathroomAssets = {
 	},
 	items: {},
 }
+const AtticAssets = {
+	tiles: {
+		// tile ref
+		0: `src/assets/tiles/floor_300_attic.png`,
+		1: `src/assets/tiles/wall_300_attic.png`,
+		2: `src/assets/tiles/wall_300_attic_corner.png`, // 2 is the corner
+		3: `src/assets/tiles/wall_300_attic.png`, // 3 is a door, but render door as wall so door can be an object
+	},
+	items: {},
+}
+
+const ParentsBedroomAssets = {
+	tiles: {
+		// tile ref
+		0: `src/assets/tiles/floor_300_wood.png`,
+		1: `src/assets/tiles/wall_300_parentsBedroom.png`,
+		2: `src/assets/tiles/wall_300_parentsBedroom_corner.png`, // 2 is the corner
+		3: `src/assets/tiles/wall_300_clean.png`, // 3 is a door, but render door as wall so door can be an object
+	},
+	items: {},
+}
 export const BedroomAssets = {
 	tiles: {
 		// tile ref
@@ -79,6 +100,18 @@ export class Map {
 		if (this.name === "Bedroom") {
 			this.staticImages = BedroomAssets.items
 			this.imgs = BedroomAssets.tiles
+		} else if (this.name === "Attic") {
+			this.staticImages = AtticAssets.items
+			this.imgs = AtticAssets.tiles
+		} else if (this.name === "Bathroom") {
+			this.staticImages = BathroomAssets.items
+			this.imgs = BathroomAssets.tiles
+		} else if (this.name === "Parent's Bedroom") {
+			this.staticImages = ParentsBedroomAssets.items
+			this.imgs = ParentsBedroomAssets.tiles
+		} else {
+			this.staticImages = BedroomAssets.items
+			this.imgs = BedroomAssets.tiles
 		}
 	}
 }
@@ -113,7 +146,7 @@ export const map4 = new Map("Parent's Bedroom", [
 	//12x8
 	[2, 1, 1, 1, 2],
 	[1, 0, 0, 0, 1],
-	[3, 0, 0, 0, 1],
+	[1, 0, 0, 0, 1],
 	[1, 0, 0, 0, 1],
 	[2, 1, 1, 1, 2],
 ])
@@ -140,11 +173,13 @@ export const map6 = new Map("Basement", [
 
 export const map7 = new Map("Attic", [
 	[2, 1, 2],
-	[3, 0, 3],
 	[1, 0, 1],
 	[1, 0, 1],
 	[1, 0, 1],
-	[2, 3, 2],
+	[1, 0, 1],
+	[1, 0, 1],
+	[1, 0, 1],
+	[2, 1, 2],
 ])
 
 export const map8 = new Map("Living Room", [

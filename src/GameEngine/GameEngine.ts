@@ -172,8 +172,7 @@ export class GameEngine {
 
 	public drawMap(map: any, type: "topDown" | "raycast" | "sideScroll", p5: any) {
 		/* only have top down support atm*/
-		// console.log(map)
-		// console.log
+		// ratio will be used for resizing
 		const ratio = percentageConverter(map, p5)
 		map.tiles.forEach((row: any, y_: any) => {
 			row.forEach((tile: any, x_: any) => {

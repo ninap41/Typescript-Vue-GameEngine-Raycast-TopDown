@@ -25,7 +25,7 @@ const doorChangeConditions: any = {
 		}
 		if (game.doorChangeConditionMaker(0, 1, 0, "space", p5)) {
 			// alert("Hallway -> Kitchen")
-			game.cutscene = { state: true, ref: "Hallway -> Parent's Room" }
+			game.cutscene = { state: true, ref: "Hallway -> Parent's Bedroom" }
 		}
 		if (game.doorChangeConditionMaker(0, 2, 0, "space", p5)) {
 			game.cutscene = { state: true, ref: "Hallway -> Basement" }
@@ -34,9 +34,9 @@ const doorChangeConditions: any = {
 			game.cutscene = { state: true, ref: "Hallway -> Living Room" }
 		}
 	},
-	"Parent's Room": (game: GameEngine, p5: any) => {
+	"Parent's Bedroom": (game: GameEngine, p5: any) => {
 		if (game.doorChangeConditionMaker(0, 0, 90, "space", p5)) {
-			game.cutscene = { state: true, ref: "Parent's Room -> Hallway" }
+			game.cutscene = { state: true, ref: "Parent's Bedroom -> Hallway" }
 		}
 	},
 	Attic: (game: GameEngine, p5: any) => {
@@ -65,7 +65,7 @@ export var beginning_rooms = {
 	Bathroom: map2,
 	Bedroom: map1,
 	Hallway: map3,
-	"Parent's Room": map4,
+	"Parent's Bedroom": map4,
 	Kitchen: map5,
 	Basement: map6,
 	Attic: map7,
@@ -81,7 +81,7 @@ export const TheBeginning = (game: GameEngine, p5: any) => {
 		doorChangeConditions[game.currentRoom](game, p5)
 	} else if (game.currentRoom === "Kitchen") {
 		doorChangeConditions[game.currentRoom](game, p5)
-	} else if (game.currentRoom === "Parent's Room") {
+	} else if (game.currentRoom === "Parent's Bedroom") {
 		doorChangeConditions[game.currentRoom](game, p5)
 	} else if (game.currentRoom === "Attic") {
 		doorChangeConditions[game.currentRoom](game, p5)

@@ -4,8 +4,6 @@ import Planck from "planck-js" /** Import the planck-js library (required by p5.
 import { ref } from "vue"
 window.planck = Planck
 const menuOpen = ref()
-const classStringLink =
-	"block text-gray-600 transition-colors duration-300 dark:text-white md:px-6 hover:text-blue-500 dark:hover:text-blue-400"
 </script>
 
 <template>
@@ -28,19 +26,31 @@ const classStringLink =
 		</nav>
 		<div class="row dropdown" :class="{ 'dropdown-after': menuOpen }">
 			<ul class="navlist">
-				<li class="navlistitem">
-					<RouterLink :class="classStringLink" @click="menuOpen = !menuOpen" to="/">Game</RouterLink>
-				</li>
-				<li class="navlistitem">
-					<RouterLink :class="classStringLink" @click="menuOpen = !menuOpen" to="/help">Help</RouterLink>
-				</li>
+				<RouterLink
+					class="navlistitem block text-gray-600 transition-colors duration-300 dark:text-white md:px-6 hover:text-blue-500 dark:hover:text-blue-400"
+					@click="menuOpen = !menuOpen"
+					to="/"
+					>Game</RouterLink
+				>
+				<RouterLink
+					class="navlistitem block text-gray-600 transition-colors duration-300 dark:text-white md:px-6 hover:text-blue-500 dark:hover:text-blue-400"
+					@click="menuOpen = !menuOpen"
+					to="/help"
+					>Help</RouterLink
+				>
+				<RouterLink
+					class="navlistitem block text-gray-600 transition-colors duration-300 dark:text-white md:px-6 hover:text-blue-500 dark:hover:text-blue-400"
+					@click="menuOpen = !menuOpen"
+					to="/playground"
+					>Playground</RouterLink
+				>
 			</ul>
 		</div>
 	</div>
 	<main>
 		<RouterView />
 	</main>
-	<div id="output" class="flex flex-col container">
+	<div id="output">
 		<div class="child"></div>
 		<div class="child"></div>
 		<div class="child"></div>

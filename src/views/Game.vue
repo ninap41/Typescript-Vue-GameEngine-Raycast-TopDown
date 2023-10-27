@@ -1,7 +1,9 @@
 <template>
-	<div>Dev Notes:</div>
-	<div v-for="stuff in stuffToDo">
-		<div style="padding: 3px">{{ stuff }}</div>
+	<div class="container notes">
+		<div>Dev Notes:</div>
+		<div v-for="stuff in stuffToDo">
+			{{ stuff }}
+		</div>
 	</div>
 	<div v-if="game">
 		<div class="game"></div>
@@ -26,7 +28,7 @@ const stuffToDo = [
 ]
 
 onMounted(async () => {
-	game = await new GameEngine("Basement")
+	game = await new GameEngine("Attic")
 })
 </script>
 
