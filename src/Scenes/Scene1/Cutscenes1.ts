@@ -23,27 +23,22 @@ class Cutscene {
 export const AllCutscenes: { [key: string]: {} } = {
 	[CUTSCENE.dreamOfDemonDrugs]: {
 		displayName: [CUTSCENE.dreamOfDemonDrugs],
-		conditionToTrigger: () => {},
 		frames: [],
 	},
 	[CUTSCENE.goToBedEarly]: {
 		displayName: [CUTSCENE.goToBedEarly],
-		conditionToTrigger: () => {},
 		frames: [],
 	},
 	[CUTSCENE.dreamOfParentsBeingMurderedByDemon]: {
 		displayName: [CUTSCENE.dreamOfParentsBeingMurderedByDemon],
-		conditionToTrigger: () => {},
 		frames: [],
 	},
 	[CUTSCENE.sadiesComing]: {
 		displayName: [CUTSCENE.sadiesComing],
-		conditionToTrigger: () => {},
 		frames: [],
 	},
 	[CUTSCENE.goToBedPeacefully]: {
 		displayName: [CUTSCENE.goToBedPeacefully],
-		conditionToTrigger: () => {},
 		frames: [],
 	},
 }

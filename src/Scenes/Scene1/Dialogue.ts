@@ -78,19 +78,15 @@ const heartsDesire = {
 	choices: [
 		{
 			content: "I hate this house.",
-			next: "houseHate",
 			visible: () => {},
 		},
 		{
 			content: "I miss Amy too.",
-			onSelect: () => {},
 			next: "missAmy",
+			visible: () => {},
 		},
 		{
 			content: "But What?",
-			onSelect: () => {
-				console.log("You lied to Rachel. Fear increase by one.")
-			},
 			next: "butWhat",
 			visible: () => {},
 		},
@@ -101,9 +97,7 @@ const comeOver = {
 	choices: [
 		{
 			content: "Yes.",
-			onSelect: () => {
-				console.log("you invited rachel over.")
-			},
+			onSelect: () => {},
 			next: "comeOver",
 		},
 		{

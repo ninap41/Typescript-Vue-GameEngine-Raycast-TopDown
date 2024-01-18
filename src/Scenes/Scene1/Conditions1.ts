@@ -3,7 +3,7 @@ export enum CONDITION {
 	tookXanax = "Took Xanax",
 	lightsOn = "Lights On",
 	fuckedUp = "Fucked Up",
-	messagedSadie = "Messaged Sadie",
+	messagedRachel = "Messaged Rachel",
 	rockieTime = "Rockie Time",
 	leavebookOnGround = "Leave Book On Ground",
 	suspiciousNeighbor = "Suspicious Neighbor",
