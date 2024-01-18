@@ -6,3 +6,44 @@
 // Pink is opened_
 // purple is cutscene_
 // black will be combos
+
+
+Rooms will have states the way npc's have states
+
+Maybe an 
+
+
+Room example: 
+Hallway -
+Phase 1 - 2  trigger => onSecondTraverse -- boolean value when exit Hallway once, SecondTraverse: true
+    painting 1 => painting two, toggle display of two room images
+
+    Paintings are then onwards based on FEAR or a sequence of accessed inspects. 
+
+
+Types of inspects
+    - inspects that replace themselves
+    - Inspects thst go away 
+
+Types of Directions 
+    - visible
+    - hidden 
+    - blocked
+
+
+
+Types of States 
+     States that evolve 
+
+     BASED ON FEAR. INTERNAL DIALOGUE VARIES
+
+     Medicated --> Fucked Up --> Near Death
+
+     Jaded ----- Buzzed --> Tipsy  --> Drunk
+     
+     Fear ------ Nervous --> Fearful --> Scared --> Terrified --> Psychotic
+
+     
+
+
+    

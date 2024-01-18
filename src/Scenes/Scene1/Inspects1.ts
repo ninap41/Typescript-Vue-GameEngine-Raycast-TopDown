@@ -32,7 +32,6 @@ class Inspect {
 	}
 	constructor(value: any, { ...args }) {
 		this.displayName = value
-
 		Object.keys(this.opt).forEach((key: any) => {
 			this.opt[`${key}`] = args[`${key}`] || undefined
 		})

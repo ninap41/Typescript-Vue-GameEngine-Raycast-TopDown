@@ -1,0 +1,29 @@
+{
+	"scene": {
+		"img": "../../src/Scenes/Scene1/_info.png",
+		"outcomes": {
+			"1": {
+				"name": "dream_demon",
+				"needs": "bag_Pager,affect_Mark Of Three",
+				"updatePoint": "traverse",
+				"checkPoint": "traverse_Enter, traverse_Leave",
+
+				"unlocks": "room_Attic"
+			},
+			"2": {},
+			"3": {},
+			"4": {}
+		},
+		"check": {
+			"needs": "bag_Pager,affect_Mark Of Three",
+			"checkAt": "traverse",
+			"unlocks": "Attic",
+			"1b": {
+				"1c": {}
+			},
+			"1c": {}
+		},
+
+		"Mark_Of_Three": {}
+	}
+}

@@ -10,9 +10,7 @@ const menuOpen = ref()
 	<div class="container-fluid" id="app">
 		<nav class="navbar">
 			<div class="col-xs-6">
-				<div class="logo">
-					<span class="logo2">The Haunting</span>
-				</div>
+				<h2 class="logo2">The Haunting</h2>
 			</div>
 			<div class="col-xs-6">
 				<div class="hamburger-wrap">
@@ -43,6 +41,12 @@ const menuOpen = ref()
 					@click="menuOpen = !menuOpen"
 					to="/playground"
 					>Playground</RouterLink
+				>
+				<RouterLink
+					class="navlistitem block text-gray-600 transition-colors duration-300 dark:text-white md:px-6 hover:text-blue-500 dark:hover:text-blue-400"
+					@click="menuOpen = !menuOpen"
+					to="/scene-planner"
+					>Scene Planner</RouterLink
 				>
 			</ul>
 		</div>
@@ -76,10 +80,7 @@ html,
 	display: flex;
 	flex-direction: row;
 	border-radius: 0px;
-}
-
-.logo1 {
-	color: red;
+	font-size: 3rem;
 }
 
 .logo2 {
@@ -141,7 +142,7 @@ html,
 
 .dropdown-after {
 	height: calc(100vh - 50px);
-	transition: height 0.2s ease;
+	transition: height 0.5s ease;
 }
 
 .navlist {

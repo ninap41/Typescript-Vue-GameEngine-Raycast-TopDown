@@ -23,6 +23,13 @@ const router = createRouter({
 			component: () => import("@/views/Help.vue"),
 			props: true,
 		},
+
+		{
+			path: "/scene-planner",
+			name: "scene-planner", //@ts-ignore
+			component: () => import("@/views/ScenePlanner.vue"),
+			props: true,
+		},
 	],
 })
 
