@@ -2,23 +2,55 @@ import {
 	tileRotationAndLocation,
 	fadeIn,
 	debuggerTool,
+	distanceTool,
 	pixelsToMapSize,
 	mapToPixelSize,
 	percentageConverter,
-} from "@/scripts/utils"
-import { gameCycle } from "@/GameEngine/Scene"
+} from "@/GameEngine/utils"
 import { TheBeginning, beginning_rooms } from "@/Scenes/Scene1/the-beginning"
-import { Player } from "@/Classes/Player.class"
+import { Player } from "@/GameEngine/Classes/Player.class"
+
 var sprite: any
+const config = {
+	devMode: true,
+	immediateStart: true,
+}
+
+const Renderer = (game: GameEngine) => {
+	const GameCycle = function (p5?: any) {
+		p5.preload = (_: any) => {
+			game.preload(p5)
+		}
+
+		p5.setup = (_: any) => {
+			game.setup(p5)
+		}
+
+		p5.draw = async (_: any) => {
+			p5.clear()
+			game.draw(p5)
+			if (game.config.devMode) {
+				debuggerTool("player", game, p5)
+			}
+		}
+		if (game.config.devMode) {
+			distanceTool(p5)
+		}
+	}
+	return {
+		GameCycle,
+	}
+}
 
 export class GameEngine {
+	config = config
 	startingRoomKey: any
 	sketch: any
 	player: Player | undefined
 	phase: any = (game: GameEngine, p5: any) => TheBeginning(game, p5)
 	gameStart: any
 	fade = 0
-	globalScale = 1
+	p5: any
 	fadeAmount = 1
 	loadedPlayer: any
 	cutscene: any = {
@@ -42,22 +74,19 @@ export class GameEngine {
 		this.rooms = beginning_rooms
 		this.currentRoom = startingRoomKey
 		this.gameStart = true
-		//this.player
 		this.map = this.rooms[this.currentRoom]
-		this.startGame()
+		this.startGame() /* load game */
 	}
 
 	private getMap() {
-		// this.currentRoom === undefined ? alert("currentRoom Not Defined.") : ""
-		// console.log(this.rooms[this.currentRoom as any])
+		this.currentRoom === undefined ? alert("currentRoom Not Defined.") : ""
 		return this.rooms[this.currentRoom as any] as any
 	}
 
 	private startGame() {
 		if (this.gameStart === true) {
 			window.document.getElementById("defaultCanvas0")?.remove() // @ts-ignore
-			this.sketch = new p5(gameCycle(this))
-			// console.log(this.sketch)
+			this.sketch = new p5(Renderer(this).GameCycle)
 		}
 	}
 
@@ -82,12 +111,13 @@ export class GameEngine {
 		this.map = this.getMap()
 		p5.createCanvas(this.map.tiles[0].length * this.map.size, this.map.tiles.length * this.map.size)
 		p5.angleMode(p5.DEGREES)
-		// this.drawTextSprite(p5)
+		/*this.drawTextSprite(p5)*/
 	}
 
 	private loadRooms(p5: any) {
 		Object.keys(this.rooms).forEach((key: string) => {
-			// iterate over all the rooms on the game map!
+			/* iterate over all the rooms on the game map! */
+
 			// load room Tiles
 			const map = this.rooms[key]
 			Object.keys(map.imgs).forEach((key: any) => {

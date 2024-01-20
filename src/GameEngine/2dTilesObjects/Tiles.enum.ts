@@ -1,6 +1,6 @@
 export enum Tiles {
+	DoorWood = "src/assets/tiles/wall_300_door.png",
 	WoodFloor = "src/assets/tiles/floor_300_wood.png",
-
 	TileFloor = "src/assets/tiles/floor_300_tile.png",
 	FloralWall = "src/assets/tiles/wall_300_floral.png",
 	FloralCorner = "src/assets/tiles/wall_300_floral_corner.png",

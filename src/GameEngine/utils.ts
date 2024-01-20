@@ -1,5 +1,5 @@
 import type { GameEngine } from "@/GameEngine/GameEngine"
-import type { Map } from "@/Classes/Map.class"
+import type { Map } from "@/GameEngine/Classes/Map.class"
 
 export const toRadians = (degrees: number) => degrees * (Math.PI / 180)
 

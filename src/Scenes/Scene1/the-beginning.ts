@@ -1,6 +1,6 @@
 import type { GameEngine } from "@/GameEngine/GameEngine"
-import { map1, map2, map3, map4, map5, map6, map7, map8 } from "@/Classes/Map.class"
-import { pixelsToMapSize } from "@/scripts/utils"
+import { map1, map2, map3, map4, map5, map6, map7, map8 } from "@/GameEngine/Classes/Map.class"
+import { pixelsToMapSize } from "@/GameEngine/utils"
 
 const doorChangeConditions: any = {
 	Bathroom: (game: GameEngine, p5: any) => {

@@ -1,4 +1,4 @@
-import { genericDoorAnimations } from "../GameEngine/Animations/door"
+import { genericDoorAnimations } from "../Animations/door"
 import { BedroomAssets, AtticAssets, BathroomAssets, ParentsBedroomAssets } from "@/GameEngine/2dTilesObjects/Assets"
 
 export class Map {

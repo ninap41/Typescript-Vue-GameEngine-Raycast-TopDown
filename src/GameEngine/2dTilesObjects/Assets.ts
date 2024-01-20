@@ -16,7 +16,7 @@ export const AtticAssets = {
 		0: Tiles.AtticFloor,
 		1: Tiles.AtticWall,
 		2: Tiles.AtticCorner, // 2 is the corner
-		3: Tiles.AtticWall, // 3 is a door, but render door as wall so door can be an object
+		3: Tiles.DoorWood, // 3 is a door, but render door as wall so door can be an object
 	},
 	items: {},
 }
@@ -27,7 +27,7 @@ export const ParentsBedroomAssets = {
 		0: Tiles.WoodFloor,
 		1: Tiles.ParentsWall,
 		2: Tiles.ParentsCorner, // 2 is the corner
-		3: Tiles.WoodFloor, // 3 is a door, but render door as wall so door can be an object
+		3: Tiles.DoorWood, // 3 is a door, but render door as wall so door can be an object
 	},
 	items: {},
 }
@@ -38,17 +38,9 @@ export const BedroomAssets = {
 		0: Tiles.WoodFloor,
 		1: Tiles.CleanWall,
 		2: Tiles.CleanCorner, // 2 is the corner
-		3: Tiles.CleanWall, // 3 is a door, but render door as wall so door can be an object
+		3: Tiles.DoorWood, // 3 is a door, but render door as wall so door can be an object
 	},
 	items: {
-		door1: {
-			img: Objects.WindowDay,
-			size: [143, 85],
-			XY: [1.7, 0.15],
-			animated: false,
-			shownConditions: [],
-			interactions: () => {},
-		},
 		rug: {
 			img: Objects.Rug,
 			size: [290, 300],
