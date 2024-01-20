@@ -8,37 +8,14 @@ import {
 } from "@/scripts/utils"
 import { gameCycle } from "@/GameEngine/Scene"
 import { TheBeginning, beginning_rooms } from "@/Scenes/Scene1/the-beginning"
+import { Player } from "@/Classes/Player.class"
 var sprite: any
 
 export class GameEngine {
 	startingRoomKey: any
 	sketch: any
-	player: any = {
-		phase: (game: GameEngine, p5: any) => TheBeginning(game, p5),
-		animations: [
-			{
-				name: "idle",
-				frames: 59,
-				img: "src/assets/character_900_idle.png",
-				frameDelay: 1,
-			},
-			{
-				name: "walk",
-				frames: 37,
-				img: "src/assets/character_900_walk.png",
-				frameDelay: -1.4,
-			},
-		],
-		currentAnimation: "idle",
-		x: 5,
-		y: 200,
-		dir: 1, // -1 is north, 1 is going to be south
-		rot: 0, // -1 is going to be west facing, 1 is going to be east
-		speed: 2.5,
-		acceleration: 0.1, // moving? (speed = 1) or backwards (speed = 0).
-		moveSpeed: 0.1, // how far (in map units) does the player move each step/update
-		rotSpeed: 5, // how much does the player rotate each step/update (in radians)
-	}
+	player: Player | undefined
+	phase: any = (game: GameEngine, p5: any) => TheBeginning(game, p5)
 	gameStart: any
 	fade = 0
 	globalScale = 1
@@ -63,7 +40,6 @@ export class GameEngine {
 
 	constructor(startingRoomKey: any, mapChange?: any) {
 		this.rooms = beginning_rooms
-
 		this.currentRoom = startingRoomKey
 		this.gameStart = true
 		//this.player
@@ -98,7 +74,8 @@ export class GameEngine {
 	// }
 
 	public preload(p5: any) {
-		this.loadPlayerAnimations(p5, this.player)
+		this.player = new Player(this, p5)
+		this.player.loadPlayerAnimations(p5, this.player)
 		this.loadRooms(p5)
 	}
 	public setup(p5: any) {
@@ -111,7 +88,6 @@ export class GameEngine {
 	private loadRooms(p5: any) {
 		Object.keys(this.rooms).forEach((key: string) => {
 			// iterate over all the rooms on the game map!
-
 			// load room Tiles
 			const map = this.rooms[key]
 			Object.keys(map.imgs).forEach((key: any) => {
@@ -164,8 +140,8 @@ export class GameEngine {
 			} else {
 				this.drawMap(this.map, "topDown", p5)
 				this.drawAssets(this.map, "topDown", p5)
-				this.playPlayerAnimations(p5, this.player)
-				this.player.phase(this, p5)
+				this.player?.playPlayerAnimations(p5, this.player, this.map)
+				this.phase(this, p5)
 			}
 		}
 	}
@@ -181,7 +157,6 @@ export class GameEngine {
 				if (tile === 2) {
 					XY = [x_ * map.size, y_ * map.size]
 					p5.image(map.loadedImages[0], XY[0], XY[1], map.size, map.size) /*add floor to space*/
-
 					XY = tileRotationAndLocation(map, x_, y_, tile, "corner", p5) /*corners */
 				} else if (tile === 1 || tile === 4 || tile === 3) {
 					XY = [x_ * map.size, y_ * map.size]
@@ -229,21 +204,6 @@ export class GameEngine {
 		}
 	}
 
-	private loadPlayerAnimations = (p5: any, player: any) => {
-		var animations: any = []
-		let ani
-
-		player.animations.forEach((animationObject: any) => {
-			ani = p5.loadAni(animationObject.img, {
-				frameSize: [900, 900],
-				frames: animationObject.frames,
-				frameDelay: animationObject.frameDelay,
-			})
-			animations.push(ani)
-		})
-		this.player.animations = animations
-	}
-
 	public playAnimation(animationKey: string, source: any, p5: any) {
 		const map = this.getMap()
 
@@ -258,86 +218,100 @@ export class GameEngine {
 			source[animationKey].scale // scale
 		)
 	}
+	// private loadPlayerAnimations = (p5: any, player: any) => {
+	// 	var animations: any = []
+	// 	let ani
 
-	public playPlayerAnimations(p5: any, char: any) {
-		const characterAnimation = {
-			walk: () =>
-				p5.animation(
-					char.animations[1], //SpriteAnim
-					char.x + 1 * (this.map.size + this.map.size / 2), //position of the animation on the canvas
-					char.y + 1 * (this.map.size + this.map.size / 2), //position of the animation on the canvas
-					char.rot, //rotation
-					0.1, // scale
-					0.1 // scale
-				),
-			idle: () =>
-				p5.animation(
-					char.animations[0], //SpriteAnim
-					char.x + 1 * (this.map.size + this.map.size / 2), //position of the animation on the canvas
+	// 	player.animations.forEach((animationObject: any) => {
+	// 		ani = p5.loadAni(animationObject.img, {
+	// 			frameSize: [900, 900],
+	// 			frames: animationObject.frames,
+	// 			frameDelay: animationObject.frameDelay,
+	// 		})
+	// 		animations.push(ani)
+	// 	})
+	// 	this.player.animations = animations
+	// }
 
-					char.y + 1 * (this.map.size + this.map.size / 2), //position of the animation on the canvas
-					char.rot, //rotation
-					0.1, // scale
-					0.1 // scale
-				),
-		}
-		if (
-			p5.kb.pressing("ArrowUp") ||
-			p5.kb.pressing("w") ||
-			p5.kb.pressing("ArrowDown") ||
-			p5.kb.pressing("s") ||
-			p5.kb.pressing("ArrowLeft" || p5.kb.pressing("a")) ||
-			p5.kb.pressing("ArrowRight") ||
-			p5.kb.pressing("d")
-		) {
-			//https://p5play.org/docs/
-			char.currentAnimation = "walk"
-			characterAnimation.walk()
-			// console.log(char.animations[0])
-		} else {
-			// idle
-			characterAnimation.idle()
-		}
+	// public playPlayerAnimations(p5: any, char: any) {
+	// 	const characterAnimation = {
+	// 		walk: () =>
+	// 			p5.animation(
+	// 				char.animations[1], //SpriteAnim
+	// 				char.x + 1 * (this.map.size + this.map.size / 2), //position of the animation on the canvas
+	// 				char.y + 1 * (this.map.size + this.map.size / 2), //position of the animation on the canvas
+	// 				char.rot, //rotation
+	// 				0.1, // scale
+	// 				0.1 // scale
+	// 			),
+	// 		idle: () =>
+	// 			p5.animation(
+	// 				char.animations[0], //SpriteAnim
+	// 				char.x + 1 * (this.map.size + this.map.size / 2), //position of the animation on the canvas
 
-		if (p5.kb.holding("ArrowUp") && p5.kb.holding("ArrowLeft")) {
-			// console.log("yo")
-			char.y -= char.speed
-			char.x -= char.speed
-			if (char.rot !== 135) {
-				char.rot -= 5
-			}
-		} else if (p5.kb.holding("ArrowRight") && p5.kb.holding("ArrowUp")) {
-			char.y -= char.speed
-			char.x += char.speed
-			if (char.rot !== 225) {
-				char.rot += 5
-			}
-		} else if (p5.kb.pressing("ArrowRight") && p5.kb.pressing("ArrowDown")) {
-			char.y += char.speed
-			char.x += char.speed
-			if (char.rot !== 315) {
-				char.rot = 315
-			}
-		} else if (p5.kb.pressing("ArrowLeft") && p5.kb.pressing("ArrowDown")) {
-			char.y += char.speed
-			char.x -= char.speed
-			if (char.rot !== 45) {
-				char.rot = 45
-			}
-		} else if (p5.kb.pressing("ArrowUp")) {
-			char.y -= char.speed
-			char.rot = 180
-		} else if (p5.kb.pressing("ArrowLeft")) {
-			char.x -= char.speed
-			char.rot = 90
-		} else if (p5.kb.pressing("ArrowRight")) {
-			char.x += char.speed
-			char.rot = 270
-		} else if (p5.kb.pressing("ArrowDown")) {
-			char.y += char.speed
-			char.rot = 0
-		}
-	}
+	// 				char.y + 1 * (this.map.size + this.map.size / 2), //position of the animation on the canvas
+	// 				char.rot, //rotation
+	// 				0.1, // scale
+	// 				0.1 // scale
+	// 			),
+	// 	}
+	// 	if (
+	// 		p5.kb.pressing("ArrowUp") ||
+	// 		p5.kb.pressing("w") ||
+	// 		p5.kb.pressing("ArrowDown") ||
+	// 		p5.kb.pressing("s") ||
+	// 		p5.kb.pressing("ArrowLeft" || p5.kb.pressing("a")) ||
+	// 		p5.kb.pressing("ArrowRight") ||
+	// 		p5.kb.pressing("d")
+	// 	) {
+	// 		//https://p5play.org/docs/
+	// 		char.currentAnimation = "walk"
+	// 		characterAnimation.walk()
+	// 		// console.log(char.animations[0])
+	// 	} else {
+	// 		// idle
+	// 		characterAnimation.idle()
+	// 	}
+
+	// 	if (p5.kb.holding("ArrowUp") && p5.kb.holding("ArrowLeft")) {
+	// 		// console.log("yo")
+	// 		char.y -= char.speed
+	// 		char.x -= char.speed
+	// 		if (char.rot !== 135) {
+	// 			char.rot -= 5
+	// 		}
+	// 	} else if (p5.kb.holding("ArrowRight") && p5.kb.holding("ArrowUp")) {
+	// 		char.y -= char.speed
+	// 		char.x += char.speed
+	// 		if (char.rot !== 225) {
+	// 			char.rot += 5
+	// 		}
+	// 	} else if (p5.kb.pressing("ArrowRight") && p5.kb.pressing("ArrowDown")) {
+	// 		char.y += char.speed
+	// 		char.x += char.speed
+	// 		if (char.rot !== 315) {
+	// 			char.rot = 315
+	// 		}
+	// 	} else if (p5.kb.pressing("ArrowLeft") && p5.kb.pressing("ArrowDown")) {
+	// 		char.y += char.speed
+	// 		char.x -= char.speed
+	// 		if (char.rot !== 45) {
+	// 			char.rot = 45
+	// 		}
+	// 	} else if (p5.kb.pressing("ArrowUp")) {
+	// 		char.y -= char.speed
+	// 		char.rot = 180
+	// 	} else if (p5.kb.pressing("ArrowLeft")) {
+	// 		char.x -= char.speed
+	// 		char.rot = 90
+	// 	} else if (p5.kb.pressing("ArrowRight")) {
+	// 		char.x += char.speed
+	// 		char.rot = 270
+	// 	} else if (p5.kb.pressing("ArrowDown")) {
+	// 		char.y += char.speed
+	// 		char.rot = 0
+	// 	}
+	// }
 
 	async rerenderCanvas(roomChange: any, newPlayerCoordinates: any, p5: any) {
 		this.currentRoom = roomChange
