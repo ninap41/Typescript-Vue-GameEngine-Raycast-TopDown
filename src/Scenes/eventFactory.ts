@@ -3,7 +3,7 @@ import type { GameEngine } from "@/GameEngine/GameEngine"
 class ViewItem {
 	name: string
 	wheels: number
-	constructor() {
+	constructor(name: string) {
 		this.name = "Truck"
 		this.wheels = 8
 	}

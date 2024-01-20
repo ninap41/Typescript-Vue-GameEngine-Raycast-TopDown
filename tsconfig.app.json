@@ -3,9 +3,6 @@
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "references.ts"],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
-    "strict": false,
-    "strictPropertyInitialization": false,
-    "strictNullChecks": false,
     "composite": true,
     "baseUrl": ".",
     "paths": {
