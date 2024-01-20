@@ -1,6 +1,5 @@
-import { TheBeginning } from "@/Scenes/Scene1/the-beginning"
-import { genericDoorAnimations } from "../GameEngine/Animations"
-import { BedroomAssets, AtticAssets, BathroomAssets, ParentsBedroomAssets } from "@/GameEngine/Assets"
+import { genericDoorAnimations } from "../GameEngine/Animations/door"
+import { BedroomAssets, AtticAssets, BathroomAssets, ParentsBedroomAssets } from "@/GameEngine/2dTilesObjects/Assets"
 
 export class Map {
 	name: any

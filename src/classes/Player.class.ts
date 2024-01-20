@@ -85,9 +85,7 @@ export class Player {
 			//https://p5play.org/docs/
 			char.currentAnimation = "walk"
 			characterAnimation.walk()
-			// console.log(char.animations[0])
 		} else {
-			// idle
 			characterAnimation.idle()
 		}
 
