@@ -5,10 +5,12 @@ import {
 	distanceTool,
 	pixelsToMapSize,
 	mapToPixelSize,
+	generateHitBoxes,
 	percentageConverter,
 } from "@/GameEngine/utils"
 import { TheBeginning, beginning_rooms } from "@/Scenes/Scene1/the-beginning"
 import { Player } from "@/GameEngine/Classes/Player.class"
+import type { ROOM_NAMES } from "./Classes/Map.class"
 
 var sprite: any
 const config = {
@@ -16,30 +18,37 @@ const config = {
 	immediateStart: true,
 }
 
-const Renderer = (game: GameEngine) => {
-	const GameCycle = function (p5?: any) {
-		p5.preload = (_: any) => {
-			game.preload(p5)
-		}
+class Renderer {
+	constructor(public game: GameEngine, public p5: any) {}
 
-		p5.setup = (_: any) => {
-			game.setup(p5)
-		}
+	public drawTextSprite(p5: any) {
+		sprite = new p5.Sprite()
+		sprite.color = "black"
+		sprite.y = 50
+		sprite.x = 200
+		sprite.w = 200
+		sprite.h = 50
+		sprite.textSize = 12
+		sprite.textColor = "white"
+		sprite.text = "Welcome To The Game"
+	}
 
-		p5.draw = async (_: any) => {
-			p5.clear()
-			game.draw(p5)
-			if (game.config.devMode) {
-				debuggerTool("player", game, p5)
+	public getGameCycle() {
+		return (p5?: any) => {
+			p5.preload = () => this.game.preload(p5)
+			p5.setup = () => this.game.setup(p5)
+			p5.draw = () => {
+				p5.clear()
+				this.game.draw(p5)
+				if (this.game.config.devMode)
+					debuggerTool("player", this.game, p5) /* player coordinates, map name, and mouse coordinates(px) */
 			}
-		}
-		if (game.config.devMode) {
-			distanceTool(p5)
+			if (this.game.config.devMode) distanceTool(p5) /* for mouse clicking between two points */
 		}
 	}
-	return {
-		GameCycle,
-	}
+
+	public loadImages = (obj: any, keys: Array<string>) => {}
+	public drawImages = (obj: any, keys: Array<string>) => {}
 }
 
 export class GameEngine {
@@ -59,17 +68,7 @@ export class GameEngine {
 	}
 	rooms: any // instead of PHASE for now
 	map: any
-	currentRoom:
-		| "Bedroom"
-		| "Bathroom"
-		| "DoorAnimation"
-		| "Hallway"
-		| "Kitchen"
-		| "Living Room"
-		| "Parents Room"
-		| "Attic"
-		| any
-
+	currentRoom: ROOM_NAMES
 	constructor(startingRoomKey: any, mapChange?: any) {
 		this.rooms = beginning_rooms
 		this.currentRoom = startingRoomKey
@@ -86,26 +85,15 @@ export class GameEngine {
 	private startGame() {
 		if (this.gameStart === true) {
 			window.document.getElementById("defaultCanvas0")?.remove() // @ts-ignore
-			this.sketch = new p5(Renderer(this).GameCycle)
+			this.sketch = new p5(new Renderer(this).getGameCycle())
 		}
 	}
 
-	// public drawTextSprite(p5: any) {
-	// 	sprite = new p5.Sprite()
-	// 	sprite.color = "black"
-	// 	sprite.y = 50
-	// 	sprite.x = 200
-	// 	sprite.w = 200
-	// 	sprite.h = 50
-	// 	sprite.textSize = 12
-	// 	sprite.textColor = "white"
-	// 	sprite.text = "Welcome To The Game"
-	// }
-
 	public preload(p5: any) {
+		/* instantiate player, load animations, and all rooms/assets for this phase */
 		this.player = new Player(this, p5)
 		this.player.loadPlayerAnimations(p5, this.player)
-		this.loadRooms(p5)
+		this.map.loadRooms(this, p5)
 	}
 	public setup(p5: any) {
 		this.map = this.getMap()
@@ -114,49 +102,9 @@ export class GameEngine {
 		/*this.drawTextSprite(p5)*/
 	}
 
-	private loadRooms(p5: any) {
-		Object.keys(this.rooms).forEach((key: string) => {
-			/* iterate over all the rooms on the game map! */
-
-			// load room Tiles
-			const map = this.rooms[key]
-			Object.keys(map.imgs).forEach((key: any) => {
-				// console.log(map.imgs[key], "IMAGE EXAMPLE")
-				map.loadedImages[key] = p5.loadImage(map.imgs[key])
-			})
-			// Door Animations
-			Object.keys(map.animations).forEach((animationKey: any) => {
-				map.loadedAnimations[map.animations[animationKey].name] = p5.loadAni(map.animations[animationKey].img, {
-					//ex brown door
-					frameSize: [map.animations[animationKey].frameSize[0], map.animations[animationKey].frameSize[1]],
-					frames: map.animations[animationKey].frames,
-					frameDelay: map.animations[animationKey].frameDelay,
-					scale: map.animations[animationKey].scale,
-				})
-				const ani = map.loadedAnimations[map.animations[animationKey].name]
-				map.loadedAnimations[map.animations[animationKey].name].looping = ani.looping
-				map.loadedAnimations[map.animations[animationKey].name].onComplete = async () => {
-					p5.clear()
-					await map.animations[animationKey].onComplete(this, p5)
-				}
-			})
-			// loadAssets for room inside
-			Object.keys(map.staticImages).forEach((key2: any) => {
-				if (map.staticImages) {
-					map.loadedStaticImages[key2] = {}
-					map.loadedStaticImages[key2] = p5.loadImage(map.staticImages[key2].img)
-				} else {
-					// alert("no static images for this map")
-				}
-			})
-		})
-	}
 	async draw(p5: any) {
 		p5.clear()
 		p5.background(51)
-		// if (sprite.mouse.pressed()) {
-		// 	sprite.remove()
-		// }
 		if (this.cutscene.state) {
 			fadeIn(p5, () => {
 				// instance of a sprite animation, not creating and moving things on p5
@@ -168,45 +116,12 @@ export class GameEngine {
 			if (this.map === undefined) {
 				this.map = this.rooms[`${this.currentRoom}`]
 			} else {
-				this.drawMap(this.map, "topDown", p5)
+				this.map.drawMap(this, this.map, "topDown", p5)
 				this.drawAssets(this.map, "topDown", p5)
 				this.player?.playPlayerAnimations(p5, this.player, this.map)
 				this.phase(this, p5)
 			}
 		}
-	}
-
-	public drawMap(map: any, type: "topDown" | "raycast" | "sideScroll", p5: any) {
-		/* only have top down support atm*/
-		// ratio will be used for resizing
-		const ratio = percentageConverter(map, p5)
-		map.tiles.forEach((row: any, y_: any) => {
-			row.forEach((tile: any, x_: any) => {
-				let XY = undefined
-				p5.push()
-				if (tile === 2) {
-					XY = [x_ * map.size, y_ * map.size]
-					p5.image(map.loadedImages[0], XY[0], XY[1], map.size, map.size) /*add floor to space*/
-					XY = tileRotationAndLocation(map, x_, y_, tile, "corner", p5) /*corners */
-				} else if (tile === 1 || tile === 4 || tile === 3) {
-					XY = [x_ * map.size, y_ * map.size]
-					p5.image(map.loadedImages[0], XY[0], XY[1], map.size, map.size) /*add floor to space */
-					XY = tileRotationAndLocation(map, x_, y_, tile, "wall", p5) /* walls */
-				} else if (tile === 8) {
-					XY = [x_ * map.size, y_ * map.size]
-					p5.fill("black")
-
-					p5.square(XY[0], XY[1], map.size, map.size) /*add floor to space */
-					p5.pop()
-				} else {
-					/* tile === 0 */
-					XY = [x_ * map.size, y_ * map.size]
-				}
-
-				p5.image(map.loadedImages[tile], XY[0], XY[1], map.size, map.size)
-				p5.pop()
-			})
-		})
 	}
 
 	public drawAssets(map: any, type: "topDown" | "raycast" | "sideScroll", p5: any) {
@@ -225,9 +140,9 @@ export class GameEngine {
 
 	public doorChangeConditionMaker(mapX: number, mapY: number, rot: number, button: string, p5: any) {
 		if (
-			pixelsToMapSize(this.player.x, this.map.size) === mapX &&
-			pixelsToMapSize(this.player.y, this.map.size) === mapY &&
-			this.player.rot === rot &&
+			pixelsToMapSize(this.player!.x, this.map.size) === mapX &&
+			pixelsToMapSize(this.player!.y, this.map.size) === mapY &&
+			this.player!.rot === rot &&
 			p5.kb.presses(button)
 		) {
 			return true
@@ -347,16 +262,17 @@ export class GameEngine {
 		this.currentRoom = roomChange
 		this.cutscene = false
 		this.map = this.getMap()
+		// this.map.loadedImages.map((i: any) => i.remove())
 
 		// alert(newPlayerCoordinates[0])
 		// alert(newPlayerCoordinates[1])
-		this.player.x = newPlayerCoordinates[0]
+		this.player!.x = newPlayerCoordinates[0]
 		// mapToPixelSize(newPlayerCoordinates[0], this.map.size)
 
-		this.player.y = newPlayerCoordinates[1]
+		this.player!.y = newPlayerCoordinates[1]
 		// mapToPixelSize(newPlayerCoordinates[1], this.map.size)
 
-		this.player.rot = newPlayerCoordinates[2]
+		this.player!.rot = newPlayerCoordinates[2]
 
 		this.cutscene = false
 

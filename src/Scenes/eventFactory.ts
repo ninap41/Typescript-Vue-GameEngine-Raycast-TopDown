@@ -1,5 +1,5 @@
 import type { GameEngine } from "@/GameEngine/GameEngine"
-
+/* still thinking through event types WIP */
 class ViewItem {
 	name: string
 	wheels: number
@@ -25,7 +25,7 @@ class ItemEvent {
 // And and abstract factory that works as a single point of interaction for our clients
 // Given the type parameter it receives, it will call the corresponding concrete factory
 const EventFactory = {
-	createEvent: function (type) {
+	createEvent: function (type: string) {
 		switch (type) {
 			case "ItemFind":
 				return new ItemEvent(type)

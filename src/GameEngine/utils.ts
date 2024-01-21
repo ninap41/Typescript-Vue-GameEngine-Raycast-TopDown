@@ -1,8 +1,11 @@
 import type { GameEngine } from "@/GameEngine/GameEngine"
 import type { Map } from "@/GameEngine/Classes/Map.class"
-
+import { HitBoxColors } from "./Classes/HitBoxColors.enum"
 export const toRadians = (degrees: number) => degrees * (Math.PI / 180)
-
+/* hint? https://editor.p5js.org/tonio.bevacqui/sketches/8Bcf_i8QT */
+export const generateHitBoxes = (objList: any[], game: GameEngine, p5: any /* list of object class*/) => {
+	return
+}
 export const rotationConditions = (
 	map: any,
 	x: any,
@@ -37,8 +40,9 @@ export const tileRotationAndLocation = (
 	y: any,
 	tile: any,
 	type: "corner" | "wall",
-	p5: any // spent a whole damn day on this, never forget persistance pays off
+	p5: any
 ): number[] => {
+	/* spent a whole damn day on this, never forget, persistance pays off don't be lazy */
 	var { cellX, cellY } = { cellX: map.tiles[0].length, cellY: map.tiles.length }
 	var { width, height } = { width: p5.width / cellX, height: p5.height / cellY }
 	let { XY, degrees } = { XY: [0, 0], degrees: 0 }
@@ -82,8 +86,8 @@ export const clearCanvas = () => {
 	window.document.getElementById("defaultCanvas0")?.remove()
 }
 
-export const pixelsToMapSize = (value: number, size: number) => {
-	return Math.abs(Math.ceil(value / size))
+export const pixelsToMapSize = (value: number | undefined, size: number) => {
+	if (value) return Math.abs(Math.ceil(value / size))
 }
 
 export const mapToPixelSize = (value: number, size: number) => {
@@ -164,17 +168,21 @@ export const distanceTool = (p5: any) => {
 }
 
 export const debuggerTool = (type: any, game: GameEngine, p5?: any) => {
-	logger(0, `${game.player.x}`, "Player x")
-	logger(1, `${game.player.y}`, "Player y")
-	logger(2, `${game.player.rot}`, "Rotation degrees")
-	logger(3, `${pixelsToMapSize(game.player.x, game.rooms[game.currentRoom].size)}`, "Player x converted")
-	logger(4, `${pixelsToMapSize(game.player.y, game.rooms[game.currentRoom].size)}`, "Player y converted")
-	logger(5, `${game.currentRoom}`, "current room")
+	if (game && game.player) {
+		logger(0, `${game?.player?.x}`, "Player x")
+		logger(1, `${game?.player?.y}`, "Player y")
+		logger(2, `${game?.player?.rot}`, "Rotation degrees")
+		logger(3, `${pixelsToMapSize(game?.player?.x, game.rooms[game.currentRoom].size)}`, "Player x converted")
+		logger(4, `${pixelsToMapSize(game?.player?.y, game.rooms[game.currentRoom].size)}`, "Player y converted")
+		logger(5, `${game.currentRoom}`, "current room")
 
-	logger(
-		6,
-		`mouseX: ${p5.mouseX} / ${pixelsToMapSize(p5.mouseX, game.rooms[game.currentRoom].size)} mouseY: ${
-			p5.mouseY
-		} / ${pixelsToMapSize(p5.mouseY, game.rooms[game.currentRoom].size)} Player Direction ${game.player.rot}`
-	)
+		logger(
+			6,
+			`mouseX: ${p5.mouseX} / ${pixelsToMapSize(p5.mouseX, game.rooms[game.currentRoom].size)} mouseY: ${
+				p5.mouseY
+			} / ${pixelsToMapSize(p5.mouseY, game.rooms[game.currentRoom].size)} Player Direction ${game?.player?.rot}`
+		)
+	} else {
+		logger(0, `Debugger Tool: args are undefined (game or game.player)`)
+	}
 }

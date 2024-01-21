@@ -1,4 +1,5 @@
 import { Tiles, Objects } from "./Tiles.enum"
+import { HitBoxColors } from "../Classes/HitBoxColors.enum"
 
 export const BathroomAssets = {
 	tiles: {
