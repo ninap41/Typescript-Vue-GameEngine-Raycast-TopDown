@@ -8,11 +8,13 @@ import {
 	generateHitBoxes,
 	percentageConverter,
 } from "@/GameEngine/utils"
+
 import { TheBeginning, beginning_rooms } from "@/Scenes/Scene1/the-beginning"
 import { Player } from "@/GameEngine/Classes/Player.class"
 import type { ROOM_NAMES } from "./Classes/Map.class"
 
 var sprite: any
+
 const config = {
 	devMode: true,
 	immediateStart: true,

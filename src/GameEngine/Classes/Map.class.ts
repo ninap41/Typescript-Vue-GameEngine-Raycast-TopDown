@@ -64,7 +64,8 @@ export class Map {
 	}
 
 	public drawMap(game: GameEngine, map: any, type: "topDown" | "raycast" | "sideScroll", p5: any) {
-		/* only have top down support atm*/
+		/* only have top down support atm, RayCasting is in another project, but stored at
+		 */
 		// ratio will be used for resizing
 		const ratio = percentageConverter(map, p5)
 		map.tiles.forEach((row: any, y_: any) => {

@@ -12,7 +12,6 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue"
-import {} from "../scripts/utils"
 import { GameEngine } from "@/GameEngine/GameEngine"
 
 // storeGame https://p5js.org/reference/#/p5/storeItem
