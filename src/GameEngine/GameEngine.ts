@@ -18,20 +18,57 @@ const config = {
 	immediateStart: true,
 }
 
-class Renderer {
-	constructor(public game: GameEngine, public p5: any) {}
-
-	public drawTextSprite(p5: any) {
-		sprite = new p5.Sprite()
-		sprite.color = "black"
-		sprite.y = 50
-		sprite.x = 200
-		sprite.w = 200
-		sprite.h = 50
-		sprite.textSize = 12
-		sprite.textColor = "white"
-		sprite.text = "Welcome To The Game"
+export class Renderer {
+	static loadTileImages(obj: any, imgsKey: string, loadedImgsKey: string, p5: any) {
+		Object.keys(obj[imgsKey]).forEach((key: any) => {
+			obj[loadedImgsKey][key] = {}
+			obj[loadedImgsKey][key] = p5.loadImage(obj[imgsKey][key]) /* Room.loadedImages map{} of p5 LOADIMAGE instance */
+		})
 	}
+
+	static loadStaticImages(obj: any, imgsKey: string, loadedImgsKey: string, p5: any) {
+		Object.keys(obj[imgsKey]).forEach((key: any) => {
+			if (obj[imgsKey]) {
+				obj[loadedImgsKey][key] = {}
+				obj[loadedImgsKey][key] = p5.loadImage(obj[imgsKey][key].img)
+			}
+		})
+	}
+
+	static loadAnimations(obj: any, animationsKey: string, loadedAnimationsKey: string, p5?: any, game?: GameEngine) {
+		Object.keys(obj[animationsKey]).forEach((key: any) => {
+			/* Room.ANIMATIONS Loop (DOOR) */
+			obj[loadedAnimationsKey][obj[animationsKey][key].name] = p5.loadAni(obj[animationsKey][key].img, {
+				/* Room.loadedAnimations map{} of p5 LOADIMAGE instance */
+				frameSize: [obj[animationsKey][key].frameSize[0], obj[animationsKey][key].frameSize[1]],
+				frames: obj[animationsKey][key].frames,
+				frameDelay: obj[animationsKey][key].frameDelay,
+				scale: obj[animationsKey][key].scale,
+			})
+			const ani = obj[loadedAnimationsKey][obj[animationsKey][key].name] /* Get Animation Instance  */
+			obj[loadedAnimationsKey][obj[animationsKey][key].name].looping = ani.looping /* check if looping */
+			obj[loadedAnimationsKey][obj[animationsKey][key].name].onComplete = async () => {
+				/* assign onComplete call back for non looped animations */
+				p5.clear()
+				await obj[animationsKey][key]?.onComplete(game, p5) // call back to remove animations
+			}
+		})
+	}
+	constructor(public game: GameEngine) {
+		this.game = game
+	}
+
+	// public drawTextSprite(spriteRef, p5: any) {
+	// 	sprite = new p5.Sprite()
+	// 	sprite.color = "black"
+	// 	sprite.y = 50
+	// 	sprite.x = 200
+	// 	sprite.w = 200
+	// 	sprite.h = 50
+	// 	sprite.textSize = 12
+	// 	sprite.textColor = "white"
+	// 	sprite.text = "Welcome To The Game"
+	// }
 
 	public getGameCycle() {
 		return (p5?: any) => {
@@ -46,9 +83,6 @@ class Renderer {
 			if (this.game.config.devMode) distanceTool(p5) /* for mouse clicking between two points */
 		}
 	}
-
-	public loadImages = (obj: any, keys: Array<string>) => {}
-	public drawImages = (obj: any, keys: Array<string>) => {}
 }
 
 export class GameEngine {
@@ -85,12 +119,11 @@ export class GameEngine {
 	private startGame() {
 		if (this.gameStart === true) {
 			window.document.getElementById("defaultCanvas0")?.remove() // @ts-ignore
-			this.sketch = new p5(new Renderer(this).getGameCycle())
+			this.sketch = new p5(new Renderer(this, p5).getGameCycle())
 		}
 	}
 
 	public preload(p5: any) {
-		/* instantiate player, load animations, and all rooms/assets for this phase */
 		this.player = new Player(this, p5)
 		this.player.loadPlayerAnimations(p5, this.player)
 		this.map.loadRooms(this, p5)
@@ -163,119 +196,15 @@ export class GameEngine {
 			source[animationKey].scale // scale
 		)
 	}
-	// private loadPlayerAnimations = (p5: any, player: any) => {
-	// 	var animations: any = []
-	// 	let ani
-
-	// 	player.animations.forEach((animationObject: any) => {
-	// 		ani = p5.loadAni(animationObject.img, {
-	// 			frameSize: [900, 900],
-	// 			frames: animationObject.frames,
-	// 			frameDelay: animationObject.frameDelay,
-	// 		})
-	// 		animations.push(ani)
-	// 	})
-	// 	this.player.animations = animations
-	// }
-
-	// public playPlayerAnimations(p5: any, char: any) {
-	// 	const characterAnimation = {
-	// 		walk: () =>
-	// 			p5.animation(
-	// 				char.animations[1], //SpriteAnim
-	// 				char.x + 1 * (this.map.size + this.map.size / 2), //position of the animation on the canvas
-	// 				char.y + 1 * (this.map.size + this.map.size / 2), //position of the animation on the canvas
-	// 				char.rot, //rotation
-	// 				0.1, // scale
-	// 				0.1 // scale
-	// 			),
-	// 		idle: () =>
-	// 			p5.animation(
-	// 				char.animations[0], //SpriteAnim
-	// 				char.x + 1 * (this.map.size + this.map.size / 2), //position of the animation on the canvas
-
-	// 				char.y + 1 * (this.map.size + this.map.size / 2), //position of the animation on the canvas
-	// 				char.rot, //rotation
-	// 				0.1, // scale
-	// 				0.1 // scale
-	// 			),
-	// 	}
-	// 	if (
-	// 		p5.kb.pressing("ArrowUp") ||
-	// 		p5.kb.pressing("w") ||
-	// 		p5.kb.pressing("ArrowDown") ||
-	// 		p5.kb.pressing("s") ||
-	// 		p5.kb.pressing("ArrowLeft" || p5.kb.pressing("a")) ||
-	// 		p5.kb.pressing("ArrowRight") ||
-	// 		p5.kb.pressing("d")
-	// 	) {
-	// 		//https://p5play.org/docs/
-	// 		char.currentAnimation = "walk"
-	// 		characterAnimation.walk()
-	// 		// console.log(char.animations[0])
-	// 	} else {
-	// 		// idle
-	// 		characterAnimation.idle()
-	// 	}
-
-	// 	if (p5.kb.holding("ArrowUp") && p5.kb.holding("ArrowLeft")) {
-	// 		// console.log("yo")
-	// 		char.y -= char.speed
-	// 		char.x -= char.speed
-	// 		if (char.rot !== 135) {
-	// 			char.rot -= 5
-	// 		}
-	// 	} else if (p5.kb.holding("ArrowRight") && p5.kb.holding("ArrowUp")) {
-	// 		char.y -= char.speed
-	// 		char.x += char.speed
-	// 		if (char.rot !== 225) {
-	// 			char.rot += 5
-	// 		}
-	// 	} else if (p5.kb.pressing("ArrowRight") && p5.kb.pressing("ArrowDown")) {
-	// 		char.y += char.speed
-	// 		char.x += char.speed
-	// 		if (char.rot !== 315) {
-	// 			char.rot = 315
-	// 		}
-	// 	} else if (p5.kb.pressing("ArrowLeft") && p5.kb.pressing("ArrowDown")) {
-	// 		char.y += char.speed
-	// 		char.x -= char.speed
-	// 		if (char.rot !== 45) {
-	// 			char.rot = 45
-	// 		}
-	// 	} else if (p5.kb.pressing("ArrowUp")) {
-	// 		char.y -= char.speed
-	// 		char.rot = 180
-	// 	} else if (p5.kb.pressing("ArrowLeft")) {
-	// 		char.x -= char.speed
-	// 		char.rot = 90
-	// 	} else if (p5.kb.pressing("ArrowRight")) {
-	// 		char.x += char.speed
-	// 		char.rot = 270
-	// 	} else if (p5.kb.pressing("ArrowDown")) {
-	// 		char.y += char.speed
-	// 		char.rot = 0
-	// 	}
-	// }
 
 	async rerenderCanvas(roomChange: any, newPlayerCoordinates: any, p5: any) {
 		this.currentRoom = roomChange
 		this.cutscene = false
 		this.map = this.getMap()
-		// this.map.loadedImages.map((i: any) => i.remove())
-
-		// alert(newPlayerCoordinates[0])
-		// alert(newPlayerCoordinates[1])
 		this.player!.x = newPlayerCoordinates[0]
-		// mapToPixelSize(newPlayerCoordinates[0], this.map.size)
-
 		this.player!.y = newPlayerCoordinates[1]
-		// mapToPixelSize(newPlayerCoordinates[1], this.map.size)
-
 		this.player!.rot = newPlayerCoordinates[2]
-
 		this.cutscene = false
-
 		p5.resizeCanvas(this.map.tiles[0].length * this.map.size, this.map.tiles.length * this.map.size)
 	}
 }

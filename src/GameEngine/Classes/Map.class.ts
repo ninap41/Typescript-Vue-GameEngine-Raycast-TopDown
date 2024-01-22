@@ -1,7 +1,8 @@
 import { genericDoorAnimations } from "../Animations/door"
 import { BedroomAssets, AtticAssets, BathroomAssets, ParentsBedroomAssets } from "@/GameEngine/2dTilesObjects/Assets"
-import type { GameEngine } from "../GameEngine"
+import { GameEngine, Renderer } from "../GameEngine"
 import { percentageConverter, tileRotationAndLocation } from "../utils"
+
 export type ROOM_NAMES =
 	| "Bedroom"
 	| "Bathroom"
@@ -13,22 +14,24 @@ export type ROOM_NAMES =
 	| "Attic"
 
 export class Map {
-	name: any
-	// interactable: any
+	name: any // unique ID
 	changeSceneCondition: any
-	size: any = 100
-	scale: any = 1
+	size: any = 100 // base size in pixels
+	scale: any = 1 // scale multiplier
+
 	//tiles
-	tileImgs = BedroomAssets.tiles
-	tiles: any
-	loadedImages: any = {}
+	tiles: any // ones, zeros, etc
+	tileImgs = BedroomAssets.tiles //asset path
+	loadedImages: any = {} // p5 image instance
+
 	// assets
-	staticImages: any = []
-	loadedStaticImages: any = {}
-	// transition animations and others
+	staticImages: any = [] // item type in room placement data
+	loadedStaticImages: any = {} //loaded p5 instance
+
+	// animations
 	animations: any = { ...genericDoorAnimations }
 	loadedAnimations: any = {}
-	playerStart: any
+
 	constructor(name: any, tiles: any, size?: any) {
 		this.name = name
 		this.tiles = tiles
@@ -51,39 +54,12 @@ export class Map {
 		}
 	}
 	public loadRooms(game: GameEngine, p5: any) {
-		/* ROOM Loop */
+		/* ROOM Loop */ //game.rooms is for Object.keys
 		Object.keys(game.rooms as Array<Map>).forEach((key: string) => {
 			const map = game.rooms[key] /* current in loop */
-			/* ROOM.IMGS Loop (TILES) */
-			Object.keys(map.tileImgs).forEach((key: any) => {
-				map.loadedImages[key] = p5.loadImage(map.tileImgs[key]) /* Room.loadedImages map{} of p5 LOADIMAGE instance */
-			})
-			Object.keys(map.animations).forEach((animationKey: any) => {
-				/* Room.ANIMATIONS Loop (DOOR) */
-				map.loadedAnimations[map.animations[animationKey].name] = p5.loadAni(map.animations[animationKey].img, {
-					/* Room.loadedAnimations map{} of p5 LOADIMAGE instance */
-					frameSize: [map.animations[animationKey].frameSize[0], map.animations[animationKey].frameSize[1]],
-					frames: map.animations[animationKey].frames,
-					frameDelay: map.animations[animationKey].frameDelay,
-					scale: map.animations[animationKey].scale,
-				})
-				const ani = map.loadedAnimations[map.animations[animationKey].name] /* Get Animation Instance  */
-				map.loadedAnimations[map.animations[animationKey].name].looping = ani.looping /* check if looping */
-				map.loadedAnimations[map.animations[animationKey].name].onComplete = async () => {
-					/* assign onComplete call back for non looped animations */
-					p5.clear()
-					await map.animations[animationKey].onComplete(game, p5)
-				}
-			})
-			/* static items */
-			Object.keys(map.staticImages).forEach((key2: any) => {
-				if (map.staticImages) {
-					map.loadedStaticImages[key2] = {}
-					map.loadedStaticImages[key2] = p5.loadImage(map.staticImages[key2].img)
-				} else {
-					// alert("no static images for this map")
-				}
-			})
+			/* tiles */ Renderer.loadTileImages(map, "tileImgs", "loadedImages", p5)
+			/* animations */ Renderer.loadAnimations(map, "animations", "loadedAnimations", p5, game)
+			/* static items */ Renderer.loadStaticImages(map, "staticImages", "loadedStaticImages", p5)
 		})
 	}
 
