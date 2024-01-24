@@ -117,7 +117,7 @@ export class GameEngine {
 		state: false,
 		ref: null,
 	}
-	rooms: any // instead of PHASE for now
+	rooms: any
 	map: any
 	currentRoom: ROOM_NAMES
 	constructor(startingRoomKey: any, mapChange?: any) {

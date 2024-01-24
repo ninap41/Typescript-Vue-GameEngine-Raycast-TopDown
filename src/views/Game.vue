@@ -1,9 +1,9 @@
 <template>
 	<div class="container notes">
-		<div>Dev Notes:</div>
+		<!-- <div>Dev Notes:</div>
 		<div v-for="stuff in stuffToDo">
 			{{ stuff }}
-		</div>
+		</div> -->
 	</div>
 	<div v-if="game">
 		<div class="game"></div>
@@ -18,12 +18,12 @@ import { GameEngine } from "@/GameEngine/GameEngine"
 var game: GameEngine
 //❗ ✅
 
-const stuffToDo = [
-	"* have relative map sizing based on the size of the window !",
-	"* Be able to view canvas in window and signal on mabile to rotate device ! ",
-	"* Have a set aspect ratio",
-	"* hit box debugger, with a drawn line in red when d is pressed",
-]
+// const stuffToDo = [
+// 	"* have relative map sizing based on the size of the window !",
+// 	"* Be able to view canvas in window and signal on mabile to rotate device ! ",
+// 	"* Have a set aspect ratio",
+// 	"* hit box debugger, with a drawn line in red when d is pressed",
+// ]
 
 /* ~~~~~~~~  Pass A Game Save Here, Not Room ~~~~~~~~~~~~ */
 

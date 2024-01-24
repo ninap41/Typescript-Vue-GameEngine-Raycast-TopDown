@@ -22,6 +22,16 @@ export const AtticAssets = {
 	items: {},
 }
 
+export const HallwayAssets = {
+	tiles: {
+		// tile ref
+		0: Tiles.WoodFloor,
+		1: Tiles.CleanWall,
+		2: Tiles.CleanCorner, // 2 is the corner
+		3: Tiles.DoorWood, // 3 is a door, but render door as wall so door can be an object
+	},
+	items: {},
+}
 export const ParentsBedroomAssets = {
 	tiles: {
 		// tile ref

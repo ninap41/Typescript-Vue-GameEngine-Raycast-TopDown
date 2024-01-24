@@ -1,5 +1,11 @@
 import { genericDoorAnimations } from "../Animations/door"
-import { BedroomAssets, AtticAssets, BathroomAssets, ParentsBedroomAssets } from "@/GameEngine/2dTilesObjects/Assets"
+import {
+	BedroomAssets,
+	AtticAssets,
+	BathroomAssets,
+	ParentsBedroomAssets,
+	HallwayAssets,
+} from "@/GameEngine/2dTilesObjects/Assets"
 import { GameEngine, Renderer } from "../GameEngine"
 import { percentageConverter, tileRotationAndLocation } from "../utils"
 
@@ -48,9 +54,9 @@ export class Map {
 		} else if (this.name === "Parent's Bedroom") {
 			this.staticImages = ParentsBedroomAssets.items
 			this.tileImgs = ParentsBedroomAssets.tiles
-		} else {
-			this.staticImages = BedroomAssets.items
-			this.tileImgs = BedroomAssets.tiles
+		} else if (this.name === "Hallway") {
+			this.staticImages = HallwayAssets.items
+			this.tileImgs = HallwayAssets.tiles
 		}
 	}
 	public loadRooms(game: GameEngine, p5: any) {
