@@ -96,8 +96,21 @@ export class Map {
 			})
 		})
 	}
-}
 
+	drawAssets(map: any, type: "topDown" | "raycast" | "sideScroll", p5: any) {
+		// iterate over static images
+
+		Object.keys(map.loadedStaticImages).forEach((assetKey: any) => {
+			p5.image(
+				map.loadedStaticImages[assetKey],
+				map.staticImages[assetKey].XY[0] * map.size,
+				map.staticImages[assetKey].XY[1] * map.size,
+				map.staticImages[assetKey].size[0],
+				map.staticImages[assetKey].size[1]
+			)
+		})
+	}
+}
 export const map1 = new Map("Bedroom", [
 	//12x8
 	[2, 1, 1, 1, 2],

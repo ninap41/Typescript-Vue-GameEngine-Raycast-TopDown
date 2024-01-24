@@ -12,7 +12,7 @@
 import { storeToRefs } from "pinia"
 import { useCounterStore } from "@/stores/counter"
 import { defineComponent, onMounted, ref, computed } from "vue"
-import { clearCanvas } from "../scripts/utils"
+import { clearCanvas } from "../GameEngine/utils"
 
 onMounted(() => {
 	clearCanvas()
@@ -20,4 +20,3 @@ onMounted(() => {
 </script>
 
 <style></style>
-../GameEngine/utils

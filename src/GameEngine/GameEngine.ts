@@ -37,6 +37,20 @@ export class Renderer {
 		})
 	}
 
+	static doorChangeConditionMaker(mapX: number, mapY: number, rot: number, button: string, game: GameEngine, p5: any) {
+		if (!game.player) {
+			throw new Error("Player undefined in Render Condition Maker")
+		}
+		if (
+			pixelsToMapSize(game.player!.x, game.map.size) === mapX &&
+			pixelsToMapSize(game.player!.y, game.map.size) === mapY &&
+			game.player!.rot === rot &&
+			p5.kb.presses(button)
+		) {
+			return true
+		}
+	}
+
 	static loadAnimations(obj: any, animationsKey: string, loadedAnimationsKey: string, p5?: any, game?: GameEngine) {
 		Object.keys(obj[animationsKey]).forEach((key: any) => {
 			/* Room.ANIMATIONS Loop (DOOR) */
@@ -60,17 +74,17 @@ export class Renderer {
 		this.game = game
 	}
 
-	// public drawTextSprite(spriteRef, p5: any) {
-	// 	sprite = new p5.Sprite()
-	// 	sprite.color = "black"
-	// 	sprite.y = 50
-	// 	sprite.x = 200
-	// 	sprite.w = 200
-	// 	sprite.h = 50
-	// 	sprite.textSize = 12
-	// 	sprite.textColor = "white"
-	// 	sprite.text = "Welcome To The Game"
-	// }
+	public drawTextSprite(spriteRef: any, p5: any) {
+		sprite = new p5.Sprite()
+		sprite.color = "black"
+		sprite.y = 50
+		sprite.x = 200
+		sprite.w = 200
+		sprite.h = 50
+		sprite.textSize = 12
+		sprite.textColor = "white"
+		sprite.text = "Welcome To The Game"
+	}
 
 	public getGameCycle() {
 		return (p5?: any) => {
@@ -91,6 +105,7 @@ export class GameEngine {
 	config = config
 	startingRoomKey: any
 	sketch: any
+	dialogueBox: any
 	player: Player | undefined
 	phase: any = (game: GameEngine, p5: any) => TheBeginning(game, p5)
 	gameStart: any
@@ -152,35 +167,16 @@ export class GameEngine {
 				this.map = this.rooms[`${this.currentRoom}`]
 			} else {
 				this.map.drawMap(this, this.map, "topDown", p5)
-				this.drawAssets(this.map, "topDown", p5)
+				this.map.drawAssets(this.map, "topDown", p5)
 				this.player?.playPlayerAnimations(p5, this.player, this.map)
+
+				if (this.config.devMode) {
+					const directionFacing = this.player?.rot
+					// make Renderer.drawHitBoxes("player", directionFacing, mapX, mapY)
+					// make Renderer.drawHitBoxes("door", directionFacing, mapX, mapY)
+				}
 				this.phase(this, p5)
 			}
-		}
-	}
-
-	public drawAssets(map: any, type: "topDown" | "raycast" | "sideScroll", p5: any) {
-		// iterate over static images
-
-		Object.keys(map.loadedStaticImages).forEach((assetKey: any) => {
-			p5.image(
-				map.loadedStaticImages[assetKey],
-				map.staticImages[assetKey].XY[0] * map.size,
-				map.staticImages[assetKey].XY[1] * map.size,
-				map.staticImages[assetKey].size[0],
-				map.staticImages[assetKey].size[1]
-			)
-		})
-	}
-
-	public doorChangeConditionMaker(mapX: number, mapY: number, rot: number, button: string, p5: any) {
-		if (
-			pixelsToMapSize(this.player!.x, this.map.size) === mapX &&
-			pixelsToMapSize(this.player!.y, this.map.size) === mapY &&
-			this.player!.rot === rot &&
-			p5.kb.presses(button)
-		) {
-			return true
 		}
 	}
 
