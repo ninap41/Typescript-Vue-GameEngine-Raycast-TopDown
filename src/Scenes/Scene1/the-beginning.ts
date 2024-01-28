@@ -10,21 +10,21 @@ const doorChangeConditions: any = {
 		}
 	},
 	Bedroom: (game: GameEngine, p5: any) => {
-		if (Renderer.doorChangeConditionMaker(0, 3, 90, "space", game, p5)) {
+		if (Renderer.doorChangeConditionMaker(1, 3, 90, "space", game, p5)) {
 			game.cutscene = { state: true, ref: "Bedroom -> Bathroom" }
 		}
-		if (Renderer.doorChangeConditionMaker(3, 1, 270, "space", game, p5)) {
+		if (Renderer.doorChangeConditionMaker(3, 2, 270, "space", game, p5)) {
 			game.cutscene = { state: true, ref: "Bedroom -> Hallway" }
 		}
 	},
 	Hallway: (game: GameEngine, p5: any) => {
-		if (Renderer.doorChangeConditionMaker(0, 0, 90, "space", game, p5)) {
+		if (Renderer.doorChangeConditionMaker(1, 1, 90, "space", game, p5)) {
 			game.cutscene = { state: true, ref: "Hallway -> Bedroom" }
 		}
-		if (Renderer.doorChangeConditionMaker(0, 4, 0, "space", game, p5)) {
+		if (Renderer.doorChangeConditionMaker(1, 5, 0, "space", game, p5)) {
 			game.cutscene = { state: true, ref: "Hallway -> Kitchen" }
 		}
-		if (Renderer.doorChangeConditionMaker(0, 1, 0, "space", game, p5)) {
+		if (Renderer.doorChangeConditionMaker(1, 1, 270, "space", game, p5)) {
 			// alert("Hallway -> Kitchen")
 			game.cutscene = { state: true, ref: "Hallway -> Parent's Bedroom" }
 		}
@@ -36,7 +36,7 @@ const doorChangeConditions: any = {
 		}
 	},
 	"Parent's Bedroom": (game: GameEngine, p5: any) => {
-		if (Renderer.doorChangeConditionMaker(0, 0, 90, "space", game, p5)) {
+		if (Renderer.doorChangeConditionMaker(1, 1, 90, "space", game, p5)) {
 			game.cutscene = { state: true, ref: "Parent's Bedroom -> Hallway" }
 		}
 	},

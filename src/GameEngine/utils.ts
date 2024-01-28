@@ -87,11 +87,11 @@ export const clearCanvas = () => {
 }
 
 export const pixelsToMapSize = (value: number | undefined, size: number) => {
-	if (value) return Math.abs(Math.ceil(value / size))
+	if (value) return Math.abs(Math.ceil(value / size + 0.5))
 }
 
 export const mapToPixelSize = (value: number, size: number) => {
-	return Math.abs(Math.ceil(value * size))
+	return Math.abs(Math.ceil(value * size - 0.5))
 }
 export function reinitializeChangeScene(scene: any) {
 	window.document.getElementById("defaultCanvas0")?.remove()

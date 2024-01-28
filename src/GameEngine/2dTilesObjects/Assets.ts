@@ -55,6 +55,7 @@ export const BedroomAssets = {
 		rug: {
 			img: Objects.Rug,
 			size: [290, 300],
+			spriteLocation: null,
 			XY: [1, 1 - 0.2],
 			animated: false,
 			shownConditions: [],
@@ -63,6 +64,7 @@ export const BedroomAssets = {
 		window: {
 			img: Objects.WindowDay, // toggle show
 			size: [143, 85],
+			spriteLocation: null,
 			XY: [1.7, 0.15],
 			animated: false,
 			shownConditions: [],
@@ -71,6 +73,7 @@ export const BedroomAssets = {
 		desk: {
 			img: Objects.Desk,
 			size: [90, 170],
+			spriteLocation: null,
 			XY: [3.1, 1 - 0.6],
 			animated: false,
 			shownConditions: [],

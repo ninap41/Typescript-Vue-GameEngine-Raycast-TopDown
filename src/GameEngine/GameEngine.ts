@@ -20,6 +20,17 @@ const config = {
 	immediateStart: true,
 }
 
+/* 
+16:9OR 4:3aspect ratio translations
+
+
+ ((window.innerWidth / 3) (window.innerWidth /3))/ (map.[0].length)= 400 x 300
+/2 =  800 x 450
+/ 1 = 1600px x 900px
+
+ should be standard
+ then blow up everything*/
+
 export class Renderer {
 	static loadTileImages(obj: any, imgsKey: string, loadedImgsKey: string, p5: any) {
 		Object.keys(obj[imgsKey]).forEach((key: any) => {
@@ -69,6 +80,26 @@ export class Renderer {
 				await obj[animationsKey][key]?.onComplete(game, p5) // call back to remove animations
 			}
 		})
+	}
+
+	static drawHitBoxes(
+		source: "player" | "enemy" | "item",
+		directionFacing: number,
+		mapX: number,
+		mapY: number,
+		tileSize: number,
+		p5: any
+	) {
+		const hitRange = false
+		const facingNumericalTranslation = () => {}
+		// based off scale... use percentages to calculate hitboxes
+		if (source === "player") {
+			// player animation down 0 left 90 up 180 right 270
+			const coordinateToCenterMap = (x: number) => x + tileSize + tileSize / 2
+			p5.stroke("green")
+			p5.noFill()
+			p5.ellipse(coordinateToCenterMap(mapX), coordinateToCenterMap(mapY), tileSize / 1.5, tileSize / 1.5)
+		}
 	}
 	constructor(public game: GameEngine) {
 		this.game = game
@@ -149,7 +180,7 @@ export class GameEngine {
 		this.map = this.getMap()
 		p5.createCanvas(this.map.tiles[0].length * this.map.size, this.map.tiles.length * this.map.size)
 		p5.angleMode(p5.DEGREES)
-		/*this.drawTextSprite(p5)*/
+		/*Renderer.drawTextSprite(p5)*/
 	}
 
 	async draw(p5: any) {
@@ -171,8 +202,8 @@ export class GameEngine {
 				this.player?.playPlayerAnimations(p5, this.player, this.map)
 
 				if (this.config.devMode) {
-					const directionFacing = this.player?.rot
-					// make Renderer.drawHitBoxes("player", directionFacing, mapX, mapY)
+					const directionFacing = this.player ? this.player.rot : 90
+					Renderer.drawHitBoxes("player", directionFacing, this.player?.x as any, this.player?.y as any, this.map.size, p5)
 					// make Renderer.drawHitBoxes("door", directionFacing, mapX, mapY)
 				}
 				this.phase(this, p5)

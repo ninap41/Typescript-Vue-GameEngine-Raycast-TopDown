@@ -77,7 +77,12 @@ export class Map {
 		map.tiles.forEach((row: any, y_: any) => {
 			row.forEach((tile: any, x_: any) => {
 				let XY = undefined
+
 				p5.push()
+				let devModeOffset = 0
+				if (game.config.devMode) {
+					devModeOffset = 1
+				}
 				if (tile === 2) {
 					XY = [x_ * map.size, y_ * map.size]
 					p5.image(map.loadedImages[0], XY[0], XY[1], map.size, map.size) /*add floor to space*/
@@ -97,7 +102,11 @@ export class Map {
 					XY = [x_ * map.size, y_ * map.size]
 				}
 
-				p5.image(map.loadedImages[tile], XY[0], XY[1], map.size, map.size)
+				if (game.config.devMode) {
+					p5.strokeWeight(4)
+					p5.stroke("white")
+				}
+				p5.image(map.loadedImages[tile], XY[0], XY[1], map.size - devModeOffset, map.size - devModeOffset)
 				p5.pop()
 			})
 		})
