@@ -73,15 +73,7 @@ export class Player {
 					0.1 // scale
 				),
 		}
-		if (
-			p5.kb.pressing("ArrowUp") ||
-			p5.kb.pressing("w") ||
-			p5.kb.pressing("ArrowDown") ||
-			p5.kb.pressing("s") ||
-			p5.kb.pressing("ArrowLeft" || p5.kb.pressing("a")) ||
-			p5.kb.pressing("ArrowRight") ||
-			p5.kb.pressing("d")
-		) {
+		if (p5.kb.pressing("w") || p5.kb.pressing("s") || p5.kb.pressing("a") || p5.kb.pressing("d")) {
 			//https://p5play.org/docs/
 			char.currentAnimation = "walk"
 			characterAnimation.walk()
@@ -89,41 +81,41 @@ export class Player {
 			characterAnimation.idle()
 		}
 
-		if (p5.kb.holding("ArrowUp") && p5.kb.holding("ArrowLeft")) {
+		if (p5.kb.holding("w") && p5.kb.holding("a")) {
 			// console.log("yo")
 			char.y -= char.speed
 			char.x -= char.speed
 			if (char.rot !== 135) {
 				char.rot -= 5
 			}
-		} else if (p5.kb.holding("ArrowRight") && p5.kb.holding("ArrowUp")) {
+		} else if (p5.kb.holding("d") && p5.kb.holding("w")) {
 			char.y -= char.speed
 			char.x += char.speed
 			if (char.rot !== 225) {
 				char.rot += 5
 			}
-		} else if (p5.kb.pressing("ArrowRight") && p5.kb.pressing("ArrowDown")) {
+		} else if (p5.kb.pressing("d") && p5.kb.pressing("s")) {
 			char.y += char.speed
 			char.x += char.speed
 			if (char.rot !== 315) {
 				char.rot = 315
 			}
-		} else if (p5.kb.pressing("ArrowLeft") && p5.kb.pressing("ArrowDown")) {
+		} else if (p5.kb.pressing("a") && p5.kb.pressing("s")) {
 			char.y += char.speed
 			char.x -= char.speed
 			if (char.rot !== 45) {
 				char.rot = 45
 			}
-		} else if (p5.kb.pressing("ArrowUp")) {
+		} else if (p5.kb.pressing("w")) {
 			char.y -= char.speed
 			char.rot = 180
-		} else if (p5.kb.pressing("ArrowLeft")) {
+		} else if (p5.kb.pressing("a")) {
 			char.x -= char.speed
 			char.rot = 90
-		} else if (p5.kb.pressing("ArrowRight")) {
+		} else if (p5.kb.pressing("d")) {
 			char.x += char.speed
 			char.rot = 270
-		} else if (p5.kb.pressing("ArrowDown")) {
+		} else if (p5.kb.pressing("s")) {
 			char.y += char.speed
 			char.rot = 0
 		}

@@ -155,7 +155,7 @@ export const map3 = new Map("Hallway", [
 export const map4 = new Map("Parent's Bedroom", [
 	//12x8
 	[2, 1, 1, 1, 2],
-	[1, 0, 0, 0, 1],
+	[3, 0, 0, 0, 1],
 	[1, 0, 0, 0, 1],
 	[1, 0, 0, 0, 1],
 	[2, 1, 1, 1, 2],

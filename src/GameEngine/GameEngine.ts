@@ -18,6 +18,9 @@ var sprite: any
 const config = {
 	devMode: true,
 	immediateStart: true,
+	hitboxes: () => {
+		return []
+	},
 }
 
 /* 
@@ -37,6 +40,16 @@ export class Renderer {
 			obj[loadedImgsKey][key] = {}
 			obj[loadedImgsKey][key] = p5.loadImage(obj[imgsKey][key]) /* Room.loadedImages map{} of p5 LOADIMAGE instance */
 		})
+	}
+
+	static getLocations(matrice: any, x: number, y: number, assetValueInMap: number) {
+		const placement = []
+		for (let i = 0; i < x * y; i++) {
+			const row = parseInt(String(i / y), 10),
+				col = i % y
+			if (matrice[row][col] === assetValueInMap) placement.push([row, col])
+		}
+		return placement
 	}
 
 	static loadStaticImages(obj: any, imgsKey: string, loadedImgsKey: string, p5: any) {
@@ -70,7 +83,7 @@ export class Renderer {
 				frameSize: [obj[animationsKey][key].frameSize[0], obj[animationsKey][key].frameSize[1]],
 				frames: obj[animationsKey][key].frames,
 				frameDelay: obj[animationsKey][key].frameDelay,
-				scale: obj[animationsKey][key].scale,
+				scale: obj[animationsKey][key]?.scale ?? 1,
 			})
 			const ani = obj[loadedAnimationsKey][obj[animationsKey][key].name] /* Get Animation Instance  */
 			obj[loadedAnimationsKey][obj[animationsKey][key].name].looping = ani.looping /* check if looping */
@@ -203,7 +216,14 @@ export class GameEngine {
 
 				if (this.config.devMode) {
 					const directionFacing = this.player ? this.player.rot : 90
+					//moving
 					Renderer.drawHitBoxes("player", directionFacing, this.player?.x as any, this.player?.y as any, this.map.size, p5)
+					//static
+					// const doorLocations = Renderer.getLocations(this.map.tiles, this.map.tiles.length, this.map.tiles[0].length, 3)
+					// console.log(doorLocations)
+					// Renderer.drawHitBoxes()
+					// Renderer.drawHitBoxes("door", directionFacing, this.player?.x as any, this.player?.y as any, this.map.size, p5)
+
 					// make Renderer.drawHitBoxes("door", directionFacing, mapX, mapY)
 				}
 				this.phase(this, p5)
@@ -221,8 +241,8 @@ export class GameEngine {
 
 			(map.tiles.length * map.size) / 2, //position of the animation on the canvas
 			0,
-			source[animationKey].scale, // scale
-			source[animationKey].scale // scale
+			source[animationKey]?.scale ?? 1, // scale
+			source[animationKey]?.scale ?? 1 // scale
 		)
 	}
 

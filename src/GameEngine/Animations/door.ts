@@ -39,6 +39,14 @@ export const genericDoorAnimations = {
 		},
 	},
 
+	"Parent's Bedroom -> Hallway": {
+		name: "Parent's Bedroom -> Hallway",
+		...generic,
+		onComplete: (game: any, p5: any) => {
+			game.rerenderCanvas("Parent's Bedroom", [2, 2, 270], p5)
+		},
+	},
+
 	"Hallway -> Bedroom": {
 		name: "Hallway -> Bedroom",
 		...generic,
