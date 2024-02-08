@@ -3,7 +3,7 @@ const generic = {
 	frameDelay: 10,
 	frames: 11,
 	frameSize: [450, 520],
-	scale: 5,
+	scale: 0.1,
 	type: "door",
 	looping: false,
 }

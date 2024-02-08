@@ -7,7 +7,7 @@ import {
 	HallwayAssets,
 } from "@/GameEngine/2dTilesObjects/Assets"
 import { GameEngine, Renderer } from "../GameEngine"
-import { percentageConverter, tileRotationAndLocation } from "../utils"
+import { percentageConverter, tileRotationAndLocation, getScale } from "../utils"
 
 export type ROOM_NAMES =
 	| "Bedroom"
@@ -23,8 +23,6 @@ export class Map {
 	name: any // unique ID
 	changeSceneCondition: any
 	size: any = 100 // base size in pixels
-	scale: any = 1 // scale multiplier
-
 	//tiles
 	tiles: any // ones, zeros, etc
 	tileImgs = BedroomAssets.tiles //asset path
@@ -113,15 +111,13 @@ export class Map {
 	}
 
 	drawAssets(map: any, type: "topDown" | "raycast" | "sideScroll", p5: any) {
-		// iterate over static images
-
 		Object.keys(map.loadedStaticImages).forEach((assetKey: any) => {
 			p5.image(
 				map.loadedStaticImages[assetKey],
 				map.staticImages[assetKey].XY[0] * map.size,
 				map.staticImages[assetKey].XY[1] * map.size,
-				map.staticImages[assetKey].size[0],
-				map.staticImages[assetKey].size[1]
+				getScale(map.staticImages[assetKey].size[0], map.size),
+				getScale(map.staticImages[assetKey].size[1], map.size)
 			)
 		})
 	}

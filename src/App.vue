@@ -78,7 +78,7 @@ const menuOpen = ref()
 
 <style>
 html,
-* {
+body {
 	background-color: black;
 }
 .navbar {

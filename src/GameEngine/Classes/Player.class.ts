@@ -1,7 +1,5 @@
-/* Add to game instance*/
-
 import type { GameEngine } from "@/GameEngine/GameEngine"
-import { TheBeginning } from "@/Scenes/Scene1/the-beginning"
+import { getScale, pixelsToMapSize } from "../utils"
 
 const mainPlayer = {
 	animations: [
@@ -30,12 +28,23 @@ export class Player {
 	acceleration = 0.1 // moving? (speed = 1) or backwards (speed = 0).
 	moveSpeed = 0.1 // how far (in map units) does the player move each step/update
 	rotSpeed = 5 // how much does the player rotate each step/update (in radians)
-	mapSize: number = 100
 
 	constructor(game: GameEngine, p5: any) {
 		this.animations = mainPlayer.animations
 	}
-	public loadPlayerAnimations = (p5: any, player: any) => {
+
+	public passable(xAhead: number, yAhead: number, map?: any) {
+		const size = map!.size
+		const mapAhead = map.tiles[`${pixelsToMapSize(xAhead, size)}`][`${pixelsToMapSize(yAhead, size)}`]
+		console.log(mapAhead)
+		if (mapAhead === 0) {
+			return true
+		} else {
+			return false
+		}
+	}
+
+	public loadPlayerAnimations = (p5: any, player: any, scale?: number) => {
 		var animations: any = []
 		let ani
 
@@ -59,8 +68,8 @@ export class Player {
 					char.x + 1 * (map.size + map.size / 2), //position of the animation on the canvas
 					char.y + 1 * (map.size + map.size / 2), //position of the animation on the canvas
 					char.rot, //rotation
-					0.1, // scale
-					0.1 // scale
+					getScale(0.1, map.size), // scale
+					getScale(0.1, map.size) // scale
 				),
 			idle: () =>
 				p5.animation(
@@ -69,10 +78,11 @@ export class Player {
 
 					char.y + 1 * (map.size + map.size / 2), //position of the animation on the canvas
 					char.rot, //rotation
-					0.1, // scale
-					0.1 // scale
+					getScale(0.1, map.size), // scale
+					getScale(0.1, map.size) // scale
 				),
 		}
+
 		if (p5.kb.pressing("w") || p5.kb.pressing("s") || p5.kb.pressing("a") || p5.kb.pressing("d")) {
 			//https://p5play.org/docs/
 			char.currentAnimation = "walk"
@@ -81,43 +91,41 @@ export class Player {
 			characterAnimation.idle()
 		}
 
-		if (p5.kb.holding("w") && p5.kb.holding("a")) {
-			// console.log("yo")
+		var originalSpeed = 2.5 // for 100
+		char.speed = getScale(originalSpeed, map.size)
+
+		if (p5.kb.holding("w") && p5.kb.holding("a") && this.passable(char.y - char.speed, char.x - char.speed, map)) {
+			if (char.rot !== 135) char.rot -= 5
 			char.y -= char.speed
 			char.x -= char.speed
-			if (char.rot !== 135) {
-				char.rot -= 5
-			}
-		} else if (p5.kb.holding("d") && p5.kb.holding("w")) {
+		} else if (p5.kb.holding("d") && p5.kb.holding("w") && this.passable(char.y - char.speed, char.x + char.speed, map)) {
+			if (char.rot !== 225) char.rot += 5
 			char.y -= char.speed
 			char.x += char.speed
-			if (char.rot !== 225) {
-				char.rot += 5
-			}
-		} else if (p5.kb.pressing("d") && p5.kb.pressing("s")) {
+		} else if (p5.kb.holding("d") && p5.kb.holding("s") && this.passable(char.y + char.speed, char.x + char.speed, map)) {
+			if (char.rot !== 315) char.rot = 315
 			char.y += char.speed
 			char.x += char.speed
-			if (char.rot !== 315) {
-				char.rot = 315
-			}
-		} else if (p5.kb.pressing("a") && p5.kb.pressing("s")) {
+		} else if (
+			p5.kb.holding("a") &&
+			p5.kb.holding("s") &&
+			this.passable((char.y += char.speed), char.x - char.speed, map)
+		) {
+			if (char.rot !== 45) char.rot = 45
 			char.y += char.speed
 			char.x -= char.speed
-			if (char.rot !== 45) {
-				char.rot = 45
-			}
-		} else if (p5.kb.pressing("w")) {
-			char.y -= char.speed
+		} else if (p5.kb.pressing("w") && this.passable(char.y - char.speed, char.x, map)) {
 			char.rot = 180
-		} else if (p5.kb.pressing("a")) {
-			char.x -= char.speed
+			char.y -= char.speed
+		} else if (p5.kb.pressing("a") && this.passable(char.y, char.x - char.speed, map)) {
 			char.rot = 90
-		} else if (p5.kb.pressing("d")) {
-			char.x += char.speed
+			char.x -= char.speed
+		} else if (p5.kb.pressing("d") && this.passable(char.y, char.x + char.speed, map)) {
 			char.rot = 270
-		} else if (p5.kb.pressing("s")) {
-			char.y += char.speed
+			char.x += char.speed
+		} else if (p5.kb.pressing("s") && this.passable(char.y + char.speed, char.x, map)) {
 			char.rot = 0
+			char.y += char.speed
 		}
 	}
 }

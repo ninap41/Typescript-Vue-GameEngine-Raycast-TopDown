@@ -1,10 +1,4 @@
 <template>
-	<div class="container notes">
-		<!-- <div>Dev Notes:</div>
-		<div v-for="stuff in stuffToDo">
-			{{ stuff }}
-		</div> -->
-	</div>
 	<div v-if="game">
 		<div class="game"></div>
 	</div>
@@ -34,10 +28,14 @@ onMounted(async () => {
 
 <style scoped>
 @media (min-width: 1024px) {
-	/* media query example - 
+	/* media query example -
 	show hide the touch controls */
 }
 * {
 	color: white;
+}
+
+.game {
+	position: relative;
 }
 </style>

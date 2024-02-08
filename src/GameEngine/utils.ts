@@ -86,6 +86,11 @@ export const clearCanvas = () => {
 	window.document.getElementById("defaultCanvas0")?.remove()
 }
 
+export const getScale = (size: any, mapSize: number, default_: number = 100) => {
+	if (mapSize === default_) return size
+	if (mapSize !== default_) return (mapSize * size) / 100
+}
+
 export const pixelsToMapSize = (value: number | undefined, size: number) => {
 	if (value) return Math.abs(Math.ceil(value / size + 0.5))
 }

@@ -60,6 +60,14 @@ export class Renderer {
 			}
 		})
 	}
+	static resizeToCanvas(game: GameEngine, p5: any) {
+		var w = p5.windowWidth
+		var tilesX = game.map.tiles[0].length
+		var tilesY = game.map.tiles.length
+		game.map.size = w / 2 / tilesX
+		p5.createCanvas(tilesX * game.map.size, tilesY * game.map.size)
+		p5.angleMode(p5.DEGREES)
+	}
 
 	static doorChangeConditionMaker(mapX: number, mapY: number, rot: number, button: string, game: GameEngine, p5: any) {
 		if (!game.player) {
@@ -76,6 +84,7 @@ export class Renderer {
 	}
 
 	static loadAnimations(obj: any, animationsKey: string, loadedAnimationsKey: string, p5?: any, game?: GameEngine) {
+		var scale = game?.scale ?? 1
 		Object.keys(obj[animationsKey]).forEach((key: any) => {
 			/* Room.ANIMATIONS Loop (DOOR) */
 			obj[loadedAnimationsKey][obj[animationsKey][key].name] = p5.loadAni(obj[animationsKey][key].img, {
@@ -83,7 +92,7 @@ export class Renderer {
 				frameSize: [obj[animationsKey][key].frameSize[0], obj[animationsKey][key].frameSize[1]],
 				frames: obj[animationsKey][key].frames,
 				frameDelay: obj[animationsKey][key].frameDelay,
-				scale: obj[animationsKey][key]?.scale ?? 1,
+				scale: obj[animationsKey][key]?.scale,
 			})
 			const ani = obj[loadedAnimationsKey][obj[animationsKey][key].name] /* Get Animation Instance  */
 			obj[loadedAnimationsKey][obj[animationsKey][key].name].looping = ani.looping /* check if looping */
@@ -96,12 +105,12 @@ export class Renderer {
 	}
 
 	static drawHitBoxes(
-		source: "player" | "enemy" | "item",
-		directionFacing: number,
+		source: "player" | "enemy" | "item" | "door",
 		mapX: number,
 		mapY: number,
 		tileSize: number,
-		p5: any
+		p5: any,
+		directionFacing?: number
 	) {
 		const hitRange = false
 		const facingNumericalTranslation = () => {}
@@ -112,6 +121,13 @@ export class Renderer {
 			p5.stroke("green")
 			p5.noFill()
 			p5.ellipse(coordinateToCenterMap(mapX), coordinateToCenterMap(mapY), tileSize / 1.5, tileSize / 1.5)
+		}
+
+		if (source === "door") {
+			// player animation down 0 left 90 up 180 right 270
+			p5.stroke("yellow")
+			p5.noFill()
+			p5.rect(mapY * tileSize, mapX * tileSize, tileSize, tileSize)
 		}
 	}
 	constructor(public game: GameEngine) {
@@ -148,6 +164,7 @@ export class Renderer {
 export class GameEngine {
 	config = config
 	startingRoomKey: any
+	scale = 1
 	sketch: any
 	dialogueBox: any
 	player: Player | undefined
@@ -193,6 +210,7 @@ export class GameEngine {
 		this.map = this.getMap()
 		p5.createCanvas(this.map.tiles[0].length * this.map.size, this.map.tiles.length * this.map.size)
 		p5.angleMode(p5.DEGREES)
+		window.onresize = (event) => Renderer.resizeToCanvas(this, p5)
 		/*Renderer.drawTextSprite(p5)*/
 	}
 
@@ -217,10 +235,13 @@ export class GameEngine {
 				if (this.config.devMode) {
 					const directionFacing = this.player ? this.player.rot : 90
 					//moving
-					Renderer.drawHitBoxes("player", directionFacing, this.player?.x as any, this.player?.y as any, this.map.size, p5)
+					Renderer.drawHitBoxes("player", this.player?.x as any, this.player?.y as any, this.map.size, p5, directionFacing)
 					//static
-					// const doorLocations = Renderer.getLocations(this.map.tiles, this.map.tiles.length, this.map.tiles[0].length, 3)
-					// console.log(doorLocations)
+					const doorLocations = Renderer.getLocations(this.map.tiles, this.map.tiles.length, this.map.tiles[0].length, 3)
+					doorLocations.forEach((door: any) => {
+						Renderer.drawHitBoxes("door", door[0], door[1], this.map.size, p5)
+					})
+
 					// Renderer.drawHitBoxes()
 					// Renderer.drawHitBoxes("door", directionFacing, this.player?.x as any, this.player?.y as any, this.map.size, p5)
 
