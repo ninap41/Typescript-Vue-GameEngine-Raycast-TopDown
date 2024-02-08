@@ -35,7 +35,7 @@ export class Player {
 
 	public passable(xAhead: number, yAhead: number, map?: any) {
 		const size = map!.size
-		const mapAhead = map.tiles[`${pixelsToMapSize(xAhead, size)}`][`${pixelsToMapSize(yAhead, size)}`]
+		const mapAhead = map.tiles[`${pixelsToMapSize(xAhead ?? 0, size)}`][`${pixelsToMapSize(yAhead ?? 0, size)}`]
 		console.log(mapAhead)
 		if (mapAhead === 0) {
 			return true
