@@ -25,8 +25,6 @@ const config = {
 
 /* 
 16:9OR 4:3aspect ratio translations
-
-
  ((window.innerWidth / 3) (window.innerWidth /3))/ (map.[0].length)= 400 x 300
 /2 =  800 x 450
 / 1 = 1600px x 900px
@@ -219,7 +217,6 @@ export class GameEngine {
 		p5.background(51)
 		if (this.cutscene.state) {
 			fadeIn(p5, () => {
-				// instance of a sprite animation, not creating and moving things on p5
 				this.playAnimation(this.cutscene.ref, this.map.loadedAnimations, p5)
 			})
 		} else {
@@ -238,6 +235,7 @@ export class GameEngine {
 					Renderer.drawHitBoxes("player", this.player?.x as any, this.player?.y as any, this.map.size, p5, directionFacing)
 					//static
 					const doorLocations = Renderer.getLocations(this.map.tiles, this.map.tiles.length, this.map.tiles[0].length, 3)
+					// item locations will be 5?
 					doorLocations.forEach((door: any) => {
 						Renderer.drawHitBoxes("door", door[0], door[1], this.map.size, p5)
 					})
@@ -259,7 +257,6 @@ export class GameEngine {
 		return p5.animation(
 			source[animationKey], //SpriteAnim
 			(map.tiles[0].length * map.size) / 2, //position of the animation on the canvas
-
 			(map.tiles.length * map.size) / 2, //position of the animation on the canvas
 			0,
 			source[animationKey]?.scale ?? 1, // scale

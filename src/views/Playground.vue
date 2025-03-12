@@ -8,13 +8,12 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
-import { clearCanvas, tileRotationAndLocation } from "@/scripts/utils"
+import { clearCanvas, tileRotationAndLocation } from "@/GameEngine/utils"
 import p5 from "p5"
 
 const loadedImages: any = {}
 var canvas
 const tileImgs: any = {
-	// tile ref
 	0: `src/assets/tiles/floor_300_wood.png`,
 	1: `src/assets/tiles/wall_300_clean.png`,
 	2: `src/assets/tiles/wall_300_corner.png`, // 2 is the corner
@@ -55,7 +54,6 @@ function drawUI() {
 }
 
 const startGameLoop = () => {
-	console.log("game Instance in Sketch!")
 	return function (p5?: any) {
 		p5.preload = (_: any) => {
 			Object.keys(tileImgs).forEach((key: any) => {
@@ -134,4 +132,3 @@ onMounted(() => {
 	background-color: green;
 }
 </style>
-@/GameEngine/utils

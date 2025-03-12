@@ -28,8 +28,6 @@ onMounted(async () => {
 
 <style scoped>
 @media (min-width: 1024px) {
-	/* media query example -
-	show hide the touch controls */
 }
 * {
 	color: white;

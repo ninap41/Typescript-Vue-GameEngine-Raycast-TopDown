@@ -27,11 +27,9 @@ export class Map {
 	tiles: any // ones, zeros, etc
 	tileImgs = BedroomAssets.tiles //asset path
 	loadedImages: any = {} // p5 image instance
-
 	// assets
 	staticImages: any = [] // item type in room placement data
 	loadedStaticImages: any = {} //loaded p5 instance
-
 	// animations
 	animations: any = { ...genericDoorAnimations }
 	loadedAnimations: any = {}
@@ -85,7 +83,7 @@ export class Map {
 					XY = [x_ * map.size, y_ * map.size]
 					p5.image(map.loadedImages[0], XY[0], XY[1], map.size, map.size) /*add floor to space*/
 					XY = tileRotationAndLocation(map, x_, y_, tile, "corner", p5) /*corners */
-				} else if (tile === 1 || tile === 4 || tile === 3) {
+				} else if (tile === 1 || tile === 3) {
 					XY = [x_ * map.size, y_ * map.size]
 					p5.image(map.loadedImages[0], XY[0], XY[1], map.size, map.size) /*add floor to space */
 					XY = tileRotationAndLocation(map, x_, y_, tile, "wall", p5) /* walls */
@@ -96,7 +94,7 @@ export class Map {
 					p5.square(XY[0], XY[1], map.size, map.size) /*add floor to space */
 					p5.pop()
 				} else {
-					/* tile === 0 */
+					/* tile === 0 || 4 */
 					XY = [x_ * map.size, y_ * map.size]
 				}
 
@@ -125,11 +123,21 @@ export class Map {
 export const map1 = new Map("Bedroom", [
 	//12x8
 	[2, 1, 1, 1, 2],
-	[1, 0, 0, 0, 1],
+	[1, 4, 0, 4, 1],
 	[1, 0, 0, 0, 3],
 	[3, 0, 0, 0, 1],
 	[2, 1, 1, 1, 2],
 ])
+
+const itemMap = [
+	[2, 2, 1, 1, 1, 1, 1, 1, 2, 2],
+	[2, 2, 1, 1, 1, 1, 1, 1, 2, 2],
+
+	[1, 4, 0, 4, 1],
+	[1, 0, 0, 0, 3],
+	[3, 0, 0, 0, 1],
+	[2, 1, 1, 1, 2],
+]
 
 export const map2 = new Map("Bathroom", [
 	//12x8
