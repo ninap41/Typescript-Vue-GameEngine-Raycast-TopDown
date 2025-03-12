@@ -93,23 +93,23 @@ const intro = function (p5: any) {
 			animationSpeed: 15,
 		})
 		animatedTitle = p5.loadImage(title.img)
-		font = p5.loadFont("src/assets/Roboto/Roboto-Bold.ttf")
+		// font = p5.loadFont("src/assets/Roboto/Roboto-Bold.ttf")
 	}
 
-	function isMouseInsideText() {
-		// only set for 32 size font, have utility for
-		const messageWidth = p5.textWidth(message)
-		const messageTop = messageY - p5.textAscent()
-		const messageBottom = messageY + p5.textDescent()
+	// function isMouseInsideText() {
+	// 	// only set for 32 size font, have utility for
+	// 	const messageWidth = p5.textWidth(message)
+	// 	const messageTop = messageY - p5.textAscent()
+	// 	const messageBottom = messageY + p5.textDescent()
 
-		return (
-			p5.mouseX > messageX && p5.mouseX < messageX + messageWidth && p5.mouseY > messageTop && p5.mouseY < messageBottom
-		)
-	}
+	// 	return (
+	// 		p5.mouseX > messageX && p5.mouseX < messageX + messageWidth && p5.mouseY > messageTop && p5.mouseY < messageBottom
+	// 	)
+	// }
 
 	p5.setup = (_: any) => {
 		const ctx = p5.createCanvas(window.innerWidth, window.innerHeight)
-		p5.textFont(font)
+		// p5.textFont(font)
 		p5.textSize(32)
 	}
 	// NOTE: Draw scene
@@ -133,22 +133,22 @@ const intro = function (p5: any) {
 			} else {
 				p5.text(message, messageX, messageY)
 			}
-			if (isMouseInsideText()) {
-				p5.cursor(p5.HAND)
-				p5.fill(255)
-				p5.stroke(0)
-			} else {
-				p5.cursor(p5.ARROW)
-				p5.fill(165, 107, 17)
-				p5.stroke(165, 107, 17)
-			}
+			// if (isMouseInsideText()) {
+			// 	p5.cursor(p5.HAND)
+			// 	p5.fill(255)
+			// 	p5.stroke(0)
+			// } else {
+			// 	p5.cursor(p5.ARROW)
+			// 	p5.fill(165, 107, 17)
+			// 	p5.stroke(165, 107, 17)
+			// }
 		}
 		if (p5.frameCount % 50 === 0) console.log("use logger here") // logger(0, thistolog)
 	}
 
 	p5.mouseClicked = (_: any) => {
-		if (isMouseInsideText()) {
-		}
+		// if (isMouseInsideText()) {
+		// }
 	}
 }
 
