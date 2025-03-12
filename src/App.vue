@@ -5,7 +5,6 @@ import Navigation from "@/components/Navigation.vue"
 import { ref } from "vue"
 
 window.planck = Planck
-
 const menuOpen = ref()
 </script>
 

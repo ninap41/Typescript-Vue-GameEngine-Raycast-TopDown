@@ -1,9 +1,7 @@
 <template>
-	<div class="container-fluid" id="app">
+	<div class="container-fluid pb-3" id="app">
 		<nav class="navbar">
-			<div class="col-xs-6">
-				<h2 class="logo2">The Haunting</h2>
-			</div>
+			<div class="col-xs-6"><h2 class="logo2">The Haunting</h2></div>
 			<div class="col-xs-6">
 				<div class="hamburger-wrap">
 					<button class="hamburger" type="button" @click="menuOpen = !menuOpen">
@@ -99,7 +97,9 @@ onMounted(() => {
 }
 
 .dropdown {
-	margin-top: 50px;
+	position: absolute;
+	width: 100%;
+
 	height: 0px;
 	background-color: black;
 	transition: height 0.2s ease;
@@ -110,7 +110,8 @@ onMounted(() => {
 }
 
 .dropdown-after {
-	height: calc(100vh - 50px);
+	height: calc(100vh - 70vh);
+
 	transition: height 0.5s ease;
 }
 
@@ -121,7 +122,7 @@ onMounted(() => {
 .navlistitem {
 	text-transform: uppercase;
 	text-align: center;
-	padding: 20px;
+	padding: 4px;
 }
 
 .navlistitem a {

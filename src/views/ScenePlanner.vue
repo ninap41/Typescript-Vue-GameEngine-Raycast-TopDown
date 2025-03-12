@@ -44,14 +44,14 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue"
-import { clearCanvas, tileRotationAndLocation } from "@/scripts/utils"
+import { clearCanvas, tileRotationAndLocation } from "@/GameEngine/utils"
 import p5 from "p5"
-import { scene as scene_ } from "@/scripts/scene-planner.json"
+// import { scene as scene_ } from "@/scripts/scene-planner.json"
 import { INSPECTS } from "@/Scenes/Scene1/Inspects1"
 import { CUTSCENE } from "@/Scenes/Scene1/Cutscenes1"
 import { ITEMS } from "@/Scenes/Scene1/Items1"
 
-var scene: any = scene_
+// var scene: any = scene_
 const temp = {
 	inventory: [],
 	inspects: [],
